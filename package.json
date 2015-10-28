@@ -1,0 +1,17 @@
+{
+  "name": "senior-project",
+  "version": "1.0.0",
+  "description": "Senior project at Lafayette",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://kengz@bitbucket.org/kengz/senior-project.git"
+  },
+  "author": "kengz",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/kengz/senior-project#readme"
+}

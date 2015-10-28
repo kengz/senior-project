@@ -1,0 +1,11 @@
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
+node_modules/
+
+# Other files and folders
+.settings/
+
+# System files
+.DS_Store
