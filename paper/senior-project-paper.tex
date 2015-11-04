@@ -163,7 +163,7 @@ $$E = \sum_{<b, V_{train}(b)> \in \ {\rm training\ examples}} (V_{train}(b) - \h
 Then, using this, devise an algorithm $A$ for training / weight-tuning. The error term above, when differentiated, yields gradient term of $\sim(V_{train}(b) - \hat{V}_{train}(b))$. One can imagine training as nodging a point closer to its true value, and the gradient gives the direction to nodge towards. This gives us a simple LMS algorithm for minimizing $\epsilon$ using that gradient term:
 
 
-\algtitle{LMS weight update (learning) algorithm}
+\algtitle{LMS weight-tuning (learning) algorithm}
 Initialize the weights $w_i$'s to random values. For each training example $<b, V_{train}(b)>$:
 \begin{enumerate}
 	\item Use the current weights to compute $\hat{V}(b)$
@@ -231,13 +231,14 @@ where $D$ is the data, $p_i$ is the proportion of samples of class $i$ in $D$. T
 $$Gain(D,b) = Entropy(D) - \sum_{v\in Values(b)} \frac{|D_v|}{D} Entropy(D_v)$$
 where $D_v$ is the subset of D whose feature vector assumes the values equals to $v$.
 
-Each path in the tree is a candidate hypothesis (collection of contributing features) to consider. Given the multitude of paths in the tree, the algorithm will end up with a set valid and consistent hypotheses. To resolve them, we simply use the {\bf Occam's razor} - choose the simplest hypothesis that fits the data. This will also prevent overfitting.
+Each path in the tree is a candidate hypothesis (collection of contributing features) to consider. Given the multitude of paths in the tree, the algorithm will end up with a set valid and consistent hypotheses. To resolve this, we simply use the {\bf Occam's razor} - choose the simplest hypothesis that fits the data. This will also prevent the initial overfitting.
 
 
 
-\subsubsection{ANN with Perceptron}
+\subsubsection{Artificial Neural Network (ANN)}
 
-\subsubsection{ANN with Gradient Descent}
+ANN with Perceptron and Gradient Descent
+
 \subsubsection{convnet}
 \subsubsection{SVM}
 \subsubsection{Deep Learning}
