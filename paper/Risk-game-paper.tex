@@ -28,6 +28,7 @@
 % \newtheorem{definition}{Definition}
 
 \newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
 \newtheorem{fact}{Fact}
 \newtheorem{remark}{Remark}
 \newtheorem{theorem}{Theorem}
@@ -80,9 +81,8 @@ kengw{\tt @}lafayette.edu.}
 
 
 \begin{abstract}
-We conduct a survey study on machine learning, its mathematical foundations, general techniques, and the latest progress in both the academia and the industry. In particular, we study a new paradigm called the Never-Ending Language Learning (NELL)$^{\ref{NELL}}$ and its potentials to overcome the singular nature of machine learners. Lastly, we design and implement a system based on NELL to predict the stock market performance. This is motivated by the abundance of data, and the complex, highly interacting, non-singular nature of the task that a machine learner has yet to match a human on.
+We conduct a survey study on machine learning, its mathematical foundations, general techniques, and the latest progress in both the academia and the industry. However, most machine learners  excel only at the task they are trained for - this is a huge limitation. Motivated by this, we study a new paradigm called the Never-Ending Language Learning (NELL)$^{\ref{NELL}}$ and its potentials to overcome the singular nature of machine learners. Lastly, we design and implement a system based on NELL to predict the stock market performance. This is driven by the abundance of data, and the complex, interacting, non-singular nature of the task that a machine learner has yet to match a human on.
 \end{abstract}
-
 
 
 \clearpage
@@ -90,17 +90,124 @@ We conduct a survey study on machine learning, its mathematical foundations, gen
 \clearpage
 
 
-
 \section{Introduction} \label{intro}
 
-Machine learning 
+We have just entered the golden age of machine learning. The field has in fact been around for decades, born from artificial intelligence and pattern recognition. It wasn't until recently that we have the level of computational power and the abundance of data to apply it. 
 
+The machine learners have accomplished some truly astonishing feats. They are systems that are trained with a copious amount of data, which allows them to surpass the performance level of human experts. Today, they are actively being researched and deployed by the biggest tech companies such as Google, IBM, Microsoft, Facebook. In fact, their major products are powered by machine learning - Google Adsense, IBM Watson, and Facebook's M - doing tasks such as ads suggestion, image recognition, medical diagnosis, and natural language processing.
+
+Typically, machine learning is best suited for the tasks that cannot be solved precisely or efficiently by algorithms. Many of these are what humans excel at - image recognition, language processing, pattern deduction. These capabilities are so trivial to us, yet they are so difficult to mimic by traditional algorithmic approaches. The prime example of {\em ``a child can easily recognize a cat in a picture, but a super computer can't''} best illustrates the failure of the algorithmic methods. Machine learning comes in to save the day.
+
+In a nutshell, one can think of a it as a machine that ``learns'' from the data. On the implementation level, it is an automated regression software that can construct an impressively accurate model. The machine takes in a training set - input data where each entry is labeled with the intended output, then trains on it and learns to recognize the pattern. After that, when fed with new unlabeled input, it gives some predicted output based on its training. However, just like a typical regression model, its scope is strictly bounded to its training set. For example, a machine that recognizes cats cannot recognize a fish without extra training. Moreover, an image recognizer cannot diagnose diseases. In this sense a machine learner's scope is {\bf singular}. We will address this issue later.
+
+The mathematical foundations of machine learning is built atop regression theory and linear algebra. Next, we present the formalization of a problem in machine learning as well as the terminologies.
+
+
+\subsection{Formalization}
+
+The following formalization is standard in the literature, we reference Tom M. Mitchell's popular textbook {\em Machine Learning}$^{\ref{Mitchell}}$.
+
+
+\begin{definition}
+A computer program is said to {\bf \em learn} from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$.
+\end{definition}
+
+We will use the terms {\em training} and {\em learning} interchangeably. Next, we define a {\bf problem}.
+
+\begin{definition}
+A {\bf \em problem} is a triple $\{T, P, E\}$. The goal of a machine learner solving the problem is to output a learned target function $\hat{V}$ that approximates an ideal target function $V$. The target function maps from the vector of input features $b$ to the set of output $O$.
+\end{definition}
+
+The feature vector $b$, output $O$, and the function representation for $\hat{V}$ are defined by the programmer as deemed suitable. In a simple regression model, $b$ is a list of chosen input features, $O$ is the set of predicted values. Typically the target function $\hat{V}$ will include a set of weights $W = \{w_i \ | \ i \in \{1,2,\cdots,n\}\}$ which are tuned during the learning. They serve as the ``memory'' of the machine to compute predicted output once it is trained.
+
+Upon having an explicit representation, and given the training data, we can devise the learning mechanism. First, define an error term $E$ between the training data and the actual machine output. Then, use the error term to devise an algorithm that tunes the weights iteratively to minimize the error. The algorithm terminates on meeting a minimum threshold error, that is when the machine can perform sufficiently good.
+
+\begin{example}
+We provide an explicit example with the checkers game:
+
+{\bf The checkers learning problem:}
+\begin{enumerate}
+\item Task $T$: playing checkers
+\item Performance measure $P$: percent of games won
+\item Training experience $E$: games played against another computer
+\end{enumerate}
+
+Next we need to determine the representations of the available knowledge. For the input feature vector $b$, we can choose a few board states, for instance, 
+$$b = <x_1, x_2, x_3, x_4>$$
+where the $x_i$'s are respectively the numbers of black pieces, black kings, red pieces and red kings on the board. We can choose a simple linear combination as our target function,
+$$\hat{V}(b) = w_0 + w_1 x_1 + w_2 x_2 + w_3 x_3 + w_4 x_4$$
+where $w_i$'s are the weights to be tuned during the training. Our output set $O$ is the list of moves at each game step given the features $x_i$'s at the time. We can define a bijection between the output range of $\hat{V}(b)$ and the $O$, but we will exclude it here.
+
+Once we have a representation, devise a learning mechanism for training. Suppose now we have a set of positive (game won) training examples $\{<b, V_{train}(b)>\}$. Define the error term using simple sum of squares
+
+$$E = \sum_{<b, V_{train}(b)> \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
+
+Then, using this, devise an algorithm for training / weight-tuning. The error term above, when differentiated, yields gradient term of $\sim(V_{train}(b) - \hat{V}_{train}(b))$. One can imagine training as nodging a point closer to its true value, and the gradient gives the direction to nodge towards. This gives us a simple LMS algorithm for minimizing $E$ using that gradient term:
+
+
+\algtitle{LMS weight update (learning) algorithm}
+Initialize the weights $w_i$'s to random values. For each training example $<b, V_{train}(b)>$:
+\begin{enumerate}
+	\item Use the current weights to compute $\hat{V}(b)$
+	\item For each weight $w_i$, update it by $$w_i \leftarrow w_i + \eta \ (V_{train}(b) - \hat{V}_{train}(b)) \ x_i$$
+\end{enumerate}
+
+where $\eta$ is the parameter that moderates the stepsize. The algorithm terminates when $w_i$'s stop changing, i.e. when the error becomes sufficiently small (zero).
+
+\end{example}
+
+One can quickly see that the example machine learner above is just a simple regressor. Obviously this toy model will not be a good checker player. Nevertheless, given a huge training data, if we choose the right knowledge representation, feature vector $b$, target function $\hat{V}$, error term $E$, and the learning algorithm, the resultant machine can perform very well. 
+
+To suit different types of problems, we can employ different {\bf representations}:
+
+
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{ | l | l | l || l | l |}
+
+\hline
+$T$ & $P$ & $E$ & $b$ & $O$ \\
+\hline \hline
+image recognition & correct labeling & labeled images & array of pixels & label of objects \\
+\hline
+driving a car & successful trip & test drives & traffic condition & wheel, pedals  \\
+\hline
+text translation & correct translations & pretranslated texts & semantics & translated text \\
+\hline
+ads suggestion & ads click rate & ads metadata & user profile & ads displayed \\
+\hline
+\end{tabular}
+\caption{Different representations for various problems.}
+
+\end{center}
+\end{table}
+
+
+
+Moreover, we can employ different {\bf learning mechanisms} - special data structures, target functions and learning algorithms. This gives rise to the different techniques, or types, of machine learners such as the Neural Nets, Support Vector Machines, Deep Learning and etc. We will investigate the popular types in the next section.
+
+A huge variety of machine learners today are being used for different purposes - most of the leading tech companies tweak and design their own. They may have very different {\bf representations} and {\bf learning mechanisms}, but the overall idea is still the same - gather labeled data, define the representations and learning algorithms, and train. The entire process is very modular, and the resultant machines are {\bf stagnant} - the machine no longer improve once training is done; and {\bf singular} - they can only function very narrowly only on the tasks they are trained for. For our discussions, we call this the {\bf stagnant \& singular paradigm}. In fact, this paradigm can readily be observed across most of the popular machine learners today.
 
 \subsection{Popular techniques}
 Damn son.
+\subsubsection{Decision Tree}
+\subsubsection{Knowledge Base}
+\subsubsection{ANN with Perceptron}
+\subsubsection{ANN with Gradient Descent}
+\subsubsection{convnet}
+\subsubsection{SVM}
+\subsubsection{Deep Learning}
+
+\subsection{Applications}
+Google translate
+google ad sense
+google deep dream, deep mind
+Google deep learning (play game!)
+IBM watson
+
 
 \subsection{Paradigm: Powers \& Limitations}
-\subsection{Applications}
 
 
 
@@ -108,8 +215,8 @@ Damn son.
 
 \subsection{Inspiration \& Features}
 \subsection{Architecture}
-\subsection{Powers \& Limitations}
 \subsection{Applications}
+\subsection{Powers \& Limitations}
 
 
 
@@ -495,6 +602,8 @@ Furthermore, game shifts could be analyzed using the fun function and the aforem
 \begin{enumerate}
 
 \item Carnegie Mellon University, \emph{NELL: Never-Ending Language Learning}. \url{http://rtw.ml.cmu.edu/rtw/}\label{NELL}
+
+\item Tom M. Mitchell, \emph{Machine Learning}. McGraw-Hill, 1997.\label{Mitchell}
 \end{enumerate}
 
 
