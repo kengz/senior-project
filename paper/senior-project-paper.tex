@@ -138,7 +138,7 @@ The feature vector $b$, output $O$, and the function representation for $\hat{V}
 
 
 
-Upon having an explicit representation, and given the training data, we can devise the learning mechanism. First, define an error term $\epsilon$ between the training data and the actual machine output. Then, use the error term to devise an algorithm that tunes the weights iteratively to minimize the error. The algorithm terminates on meeting a minimum threshold error, that is when the machine can perform sufficiently good.
+Upon having an explicit representation, and given the training data, we can devise the learning mechanism. First, define an error term $\mathcal{E}$ between the training data and the actual machine output. Then, use the error term to devise an algorithm that tunes the weights iteratively to minimize the error. The algorithm terminates on meeting a minimum threshold error, that is when the machine can perform sufficiently good.
 
 \begin{example}
 We provide an explicit example with the checkers game:
@@ -158,9 +158,9 @@ where $w_i$'s are the weights to be tuned during the training. Our output set $O
 
 Once we have a representation, devise a learning mechanism for training. Suppose now we have a set of positive (games won) training examples $\{<b, V_{train}(b)>\}$. Define the error term using simple sum of squares
 
-$$E = \sum_{<b, V_{train}(b)> \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
+$$\mathcal{E} = \sum_{<b, V_{train}(b)> \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
 
-Then, using this, devise an algorithm $A$ for training / weight-tuning. The error term above, when differentiated, yields gradient term of $\sim(V_{train}(b) - \hat{V}_{train}(b))$. One can imagine training as nodging a point closer to its true value, and the gradient gives the direction to nodge towards. This gives us a simple LMS algorithm for minimizing $\epsilon$ using that gradient term:
+Then, using this, devise an algorithm $A$ for training / weight-tuning. The error term above, when differentiated, yields gradient term of $\sim(V_{train}(b) - \hat{V}_{train}(b))$. One can imagine training as nodging a point closer to its true value, and the gradient gives the direction to nodge towards. This gives us a simple LMS algorithm for minimizing $\mathcal{E}$ using that gradient term:
 
 
 \algtitle{LMS weight-tuning (learning) algorithm}
@@ -174,7 +174,7 @@ where $\eta$ is the parameter that moderates the stepsize. The algorithm termina
 
 \end{example}
 
-One can quickly see that the example machine learner above is just a simple regressor. Obviously this toy model will not be a good checker player. Nevertheless, given a huge training data, if we choose the right knowledge representation, feature vector $b$, target function $\hat{V}$, error term $\epsilon$, and the learning algorithm, the resultant machine can perform very well. 
+One can quickly see that the example machine learner above is just a simple regressor. Obviously this toy model will not be a good checker player. Nevertheless, given a huge training data, if we choose the right knowledge representation, feature vector $b$, target function $\hat{V}$, error term $\mathcal{E}$, and the learning algorithm, the resultant machine can perform very well. 
 
 To suit a different type of problem, we can employ a different {\bf representation} - which we define to be the set $\{T, P, E, b, O\}$, as illustrated in Table \ref{rep}.
 
@@ -215,7 +215,7 @@ A huge variety of machine learners today are being used for different purposes -
 
 
 
-\subsection{Popular techniques}
+\subsection{Popular Techniques}
 
 Before getting to the discussion on the paradigm, we take a quick look at the most common and powerful machine learners. These are derived from the same {\bf stagnant \& singular paradigm} by varying the {\bf representations} and {\bf learning mechanisms}.
 
@@ -225,11 +225,7 @@ Before getting to the discussion on the paradigm, we take a quick look at the mo
 
 Decision tree is a popular method stemmed from artificial intelligence, used for hypothesis-searching and inductive reference. It uses a {\em tree representation}, where each node is a feature variable, and each edge is a value the feature takes on. The leaf nodes are the classification (output) values. Every path from the root to the leaf represents an instance of the feature $b$ and its output $o$. Moreover, different paths can be combined with logical $OR$ and $AND$ to yield a more general hypothesis space.
 
-For the {\em learning mechanism}, a common method is to use the entropy measure and entropy gain while branching on each node (making a decision) while descending the tree. Suppose the data has $c$ classifications (e.g. $c=2$ for binary classifiers), the entropy is defined as
-$$Entropy(D) = \sum_{i=1}^{c} -p_i \ log_2 \ p_i$$
-where $D$ is the data, $p_i$ is the proportion of samples of class $i$ in $D$. This allows us to judge the performance $P$ and search for the target function $\hat{V}$ by using the entropy gain for each feature $b$,
-$$Gain(D,b) = Entropy(D) - \sum_{v\in Values(b)} \frac{|D_v|}{D} Entropy(D_v)$$
-where $D_v$ is the subset of D whose feature vector assumes the values equals to $v$.
+For the {\em learning mechanism}, a common method is to use the entropy measure and entropy gain while branching on each node (making a decision) while descending the tree. Suppose the data has $c$ classifications (e.g. $c=2$ for binary classifiers), the entropy is defined as $$Entropy(D) = \sum_{i=1}^{c} -p_i \ log_2 \ p_i$$ where $D$ is the data, $p_i$ is the proportion of samples of class $i$ in $D$. This allows us to judge the performance $P$ and search for the target function $\hat{V}$ by using the entropy gain for each feature $b$, $$Gain(D,b) = Entropy(D) - \sum_{v\in Values(b)} \frac{|D_v|}{D} Entropy(D_v)$$ where $D_v$ is the subset of D whose feature vector assumes the values equals to $v$.
 
 Each path in the tree is a candidate hypothesis (collection of contributing features) to consider. Given the multitude of paths in the tree, the algorithm will end up with a set valid and consistent hypotheses. To resolve this, we simply use the {\bf Occam's razor} - choose the simplest hypothesis that fits the data. This will also prevent the initial overfitting.
 
@@ -237,7 +233,47 @@ Each path in the tree is a candidate hypothesis (collection of contributing feat
 
 \subsubsection{Artificial Neural Network (ANN)}
 
-ANN with Perceptron and Gradient Descent
+Often called just the ``neural net'', ANN was inspired by the biological system of neurons in the brain (note that it is inconsistent with the biological version). This is one of the earliest techniques, and has improved over the decades; the first practical usage was in the 80's, and today it is one of the most popular with countless variations. Here, we will describe the original and the most common designs.
+
+Neural network is a practical method for learning examples that are real-valued, discretized, and multi-dimensional. It is so general that it has been applied successfully to image recognition, pattern-identification, robotics, speech and many more. Its popularity is primarily due to its power to learn accurately and its simplicity.
+
+An ANN is a directed graph whose nodes are the feature variables, and edges are the weights. It is ordered into layers of nodes that are adjacently bipartite, i.e. every node in each layer connects (directionally) to all the nodes in the next layer. The first is called the {\em input layer}, the last the {\em output layer}, and the rest in between the {\em hidden layers}. A node is also called a {\em unit}, and those in the {\em hidden layers} are called {\em hidden units.}
+
+The {\em input layer} corresponds to the feature vector $b$ - each unit takes the value for each feature variable. Similarly the output layer corresponds to the output $o$. Each iteration of training involves a series of computation from the input, through the hidden layers, to the output. Across the net, the outputs become the inputs for the next layer.
+
+Suppose we have at layer $i$ nodes $n_{i,1}, n_{i,2}, \cdots, n_{i,p}$ bipartite to nodes $n_{i+1,1}, n_{i+1,2}, \cdots, n_{i+1,q}$ at layer $i+1$. We can simply represent as the edges with their weights with subscript indicating the connection. For example, the first node $n_{i,1}$ connects to all the edges in the next layer via $w_{i,1,1}, w_{i,1,2}, \cdots, w_{i,1,q}$.
+
+Then, we can define the function for mapping input values at $n_{i,1}, n_{i,2}, \cdots, n_{i,p}$ to an output value at $n_{i+1,j}$, i.e. we can define a target function for an output node $n_{i+1,j}$ $$\hat{V}_{i+1,j} : \{ n_{i,1}, n_{i,2}, \cdots, n_{i,p} \} \times \{ w_{i,1,j}, w_{i,2,j}, \cdots, w_{i,p,j} \} \mapsto n_{i+1,j}$$
+
+Typically, an inner product is sufficient to yield a good ANN. For this we have the form $$\hat{V}_{i+1,j} = < n_{i,1}, \cdots, n_{i,p} > \cdot < w_{i,1,j}, \cdots, w_{i,p,j} > = n_{i,1}w_{i,1,j} + \cdots + n_{i,p}w_{i,p,j}$$
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{images/ANN.png}\\
+\caption{An ANN with 3 input units, 2 hidden layers each with 3 and 2 hidden units, and 1 output unit. The target function is the dot product between the incident values from the previous layer and their edge weights.}\label{ANN-fig}
+\end{figure}
+
+An explicit example is provided in Figure \ref{ANN-fig}. The feature vector input is $b = <0,0,1>$; the value $$n_{2,1} = \hat{V}_{2,1} = n_{1,1}w_{1,1,1} + n_{1,2}w_{1,2,1} + n_{1,3}w_{1,3,1} = 0 \cdot 0.5 + 0 \cdot 0.4 + 1 \cdot 0.1 = 0.1$$
+
+If we wish, we can define the target function $\hat{V}$ for the entire ANN by taking the ordered composition of the sub-target functions defined above, but this representation is cumbersome.
+
+
+Computation ... by layer
+Each round of training takes the input 
+
+
+Input layers X
+output layers
+recursive propagation
+T, P, E, b, O
+V, A
+
+Perceptron,
+gradient descent
+backpropagation
+RNN
+convnet
+
 
 \subsubsection{convnet}
 \subsubsection{SVM}
