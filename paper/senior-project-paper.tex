@@ -151,26 +151,26 @@ We provide an explicit example with the checkers game:
 \end{enumerate}
 
 Next we need to determine the representations of the available knowledge. For the input feature vector $b$, we can choose a few board states, for instance, 
-$$b = <x_1, x_2, x_3, x_4>$$
+$$b = \langle x_1, x_2, x_3, x_4 \rangle$$
 where the $x_i$'s are respectively the numbers of black pieces, black kings, red pieces and red kings on the board. We can choose a simple linear combination as our target function,
 $$\hat{V}(b) = w_0 + w_1 x_1 + w_2 x_2 + w_3 x_3 + w_4 x_4$$
 where $w_i$'s are the weights to be tuned during the training. Our output set $O$ is the list of moves at each game step given the features $x_i$'s at the time. We can define a bijection between the output range of $\hat{V}(b)$ and the $O$, but we will exclude it here.
 
-Once we have a representation, devise a learning mechanism for training. Suppose now we have a set of positive (games won) training examples $\{<b, V_{train}(b)>\}$. Define the error term using simple sum of squares
+Once we have a representation, devise a learning mechanism for training. Suppose now we have a set of positive (games won) training examples $\{\langle b, V_{train}(b) \rangle\}$. Define the error term using simple sum of squares
 
-$$\mathcal{E} = \sum_{<b, V_{train}(b)> \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
+$$\mathcal{E} = \sum_{\langle b, V_{train}(b) \rangle \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
 
 Then, using this, devise an algorithm $A$ for training / weight-tuning. The error term above, when differentiated, yields gradient term of $\sim(V_{train}(b) - \hat{V}_{train}(b))$. One can imagine training as nodging a point closer to its true value, and the gradient gives the direction to nodge towards. This gives us a simple LMS algorithm for minimizing $\mathcal{E}$ using that gradient term:
 
 
 \algtitle{LMS weight-tuning (learning) algorithm}
-Initialize the weights $w_i$'s to random values. For each training example $<b, V_{train}(b)>$:
+Initialize the weights $w_i$'s to random values. For each training example $\langle b, V_{train}(b) \rangle$:
 \begin{enumerate}
 	\item Use the current weights to compute $\hat{V}(b)$
-	\item For each weight $w_i$, update it by $$w_i \leftarrow w_i + \eta \ (V_{train}(b) - \hat{V}_{train}(b)) \ x_i$$
+	\item For each weight $w_i$, update it by $$w_i \leftarrow w_i + \alpha \ (V_{train}(b) - \hat{V}_{train}(b)) \ x_i$$
 \end{enumerate}
 
-where $\eta$ is the parameter that moderates the stepsize. The algorithm terminates when $w_i$'s stop changing, i.e. when the error becomes sufficiently small (zero).
+where $\alpha$ is the parameter that moderates the stepsize. The algorithm terminates when $w_i$'s stop changing, i.e. when the error becomes sufficiently small (zero).
 
 \end{example}
 
@@ -245,7 +245,7 @@ Suppose we have at layer $i$ nodes $n_{i,1}, n_{i,2}, \cdots, n_{i,p}$ bipartite
 
 Then, we can define the function for mapping input values at $n_{i,1}, n_{i,2}, \cdots, n_{i,p}$ to an output value at $n_{i+1,j}$, i.e. we can define a target function for an output node $n_{i+1,j}$ $$\hat{V}_{i+1,j} : \{ w_{i,1,j}, w_{i,2,j}, \cdots, w_{i,p,j} \} \times \{ n_{i,1}, n_{i,2}, \cdots, n_{i,p} \} \mapsto n_{i+1,j}$$
 
-Typically, an inner product is sufficient to yield a good ANN. For this we have the form $$\hat{V}_{i+1,j} = < w_{i,1,j}, \cdots, w_{i,p,j} > \cdot < n_{i,1}, \cdots, n_{i,p} > = w_{i,1,j}n_{i,1} + \cdots + w_{i,p,j}n_{i,p}$$
+Typically, an inner product is sufficient to yield a good ANN. For this we have the form $$\hat{V}_{i+1,j} = \langle  w_{i,1,j}, \cdots, w_{i,p,j}  \rangle \cdot \langle  n_{i,1}, \cdots, n_{i,p}  \rangle = w_{i,1,j}n_{i,1} + \cdots + w_{i,p,j}n_{i,p}$$
 
 \begin{figure}
 \centering
@@ -253,18 +253,19 @@ Typically, an inner product is sufficient to yield a good ANN. For this we have 
 \caption{An ANN with 3 input units, 2 hidden layers each with 3 and 2 hidden units, and 1 output unit. The target function is the dot product between the incident values from the previous layer and their edge weights.}\label{ANN-fig}
 \end{figure}
 
-An explicit example is provided in Figure \ref{ANN-fig}. The feature vector input is $b = <0,0,1>$; the value $$n_{2,1} = \hat{V}_{2,1} = w_{1,1,1}n_{1,1} + w_{1,2,1}n_{1,2} + w_{1,3,1}n_{1,3} = 0.5 \cdot 0 + 0.4 \cdot 0 + 0.1 \cdot 1 = 0.1$$
+An explicit example is provided in Figure \ref{ANN-fig}. The feature vector input is $b = \langle 0,0,1 \rangle$; the value $$n_{2,1} = \hat{V}_{2,1} = w_{1,1,1}n_{1,1} + w_{1,2,1}n_{1,2} + w_{1,3,1}n_{1,3} = 0.5 \cdot 0 + 0.4 \cdot 0 + 0.1 \cdot 1 = 0.1$$
 
 If we wish, we can define the target function $\hat{V} : b \mapsto o$ for the entire ANN by taking the ordered composition of the sub-target functions defined above, but this is cumbersome. Often the graph representation is used.
 
 We can create variations of ANN by tweaking the target function $\hat{V}$, the error term $\mathcal{E}$, and the training algorithm $A$. Moreover, we can change the graph structures by adding more hierarchies (convolutional, deep learning) or {\em backedges} to create cycles (recurrent neural network RNN).
 
-With data $\{<b, V(b)>\}$, the training goes as usual. A single iteration of training starts from the input layer and ends at the output layer. The error term is then used with the tuning algorithm $A$ to tune the edge weights. Training then reiterates until the output error is smaller than a threshold. Unsurprisingly, training a large neural net can take up to months, but the results can be very impressive. Below, we describe some of the most powerful versions that have recently made the news.
+With data $\{\langle b, V(b) \rangle\}$, the training goes as usual. A single iteration of training starts from the input layer and ends at the output layer. The error term is then used with the tuning algorithm $A$ to tune the edge weights. Training then reiterates until the output error is smaller than a threshold. Unsurprisingly, training a large neural net can take up to months, but the results can be very impressive. Below, we describe some of the most powerful versions that have recently made the news.
+
+
 
 
 
 \subsubsection{ANN with Perceptrons}
-
 
 Given the general design above, we can simplify our notations to aid discussions. Focusing on a subnetwork, look at a single output unit $o$ with incoming inputs $n_1, n_2, \cdots, n_k$ and weights $w_1, w_2, \cdots, w_k$, the target function for a perceptron unit is
 \[
@@ -275,18 +276,48 @@ o(n_1, \cdots, n_k) =
 \end{cases}
 \]
 
-The training rule for the algorithm is a simple update, $$w_i \leftarrow w_i + \eta(t-o)n_i$$ where $\eta$ is the stepsize moderation, $t$ is the target output value, $o$ the actual perceptron output, $n_i$ the input node value.
+Concisely, we write $$o(\vec{n}) = sign(\vec{w} \cdot \vec{n})$$
+
+The training rule for the algorithm is a simple update, $$w_i \leftarrow w_i + \alpha(t-o)n_i$$ where $\alpha$ is the stepsize moderation called the {\em learning rate}, $t$ is the target output value, $o$ the actual perceptron output, $n_i$ the input node value.
+
+
 
 
 \subsubsection{ANN with Gradient Descent}
+
+The gradient descent can be seen as a refinement to the perceptron. Its target function is $$o(\vec{n}) = \vec{w} \cdot \vec{n}$$
+
+The error term is defined as $$\mathcal{E}(\vec{w}) = \frac{1}{2} \sum_{d \in D} (t_d - o_d)^2$$ where $D$ is the data, $t_d$ is the target output value, $o_d$ the unit output for a data point $d$. This will guide the weight-tuning rule for the algorithm, which also gives its name.
+
+Given the formalism, we can equivalently view as a vector space. Our task then is to find the set of weights that yields the right target function. Minimizing the error term is then equivalent to minimizing the error surface in the vector space. We know this is done by stepping in the direction of the steepest descent along the error surface, which is simply the gradient of the error term $$\nabla \mathcal{E}(\vec{w}) =\ \langle  \frac{\partial \mathcal{E}}{\partial w_0}, \frac{\partial \mathcal{E}}{\partial w_1}, \cdots, \frac{\partial \mathcal{E}}{\partial w_k}  \rangle$$
+
+Then, the tuning rule is simply $$\vec{w} \leftarrow \vec{w} - \alpha \nabla \mathcal{E}(\vec{w})$$ where $\alpha$ is the learning rate. When written in component form we get $$w_i \leftarrow w_i - \Delta w_i = w_i - \alpha \frac{\partial \mathcal{E}}{\partial w_i}$$
+
+
+\algtitle{Gradient-Descent(Data, $\alpha$)}
+Each training example $d \in Data$ is of the form $d = \langle \vec{n}, t \rangle$, where $\vec{n}$ is the input vector, $t$ the target output value, $\alpha$ the learning rate. Note that the partials are found using discretized iterations at step 2.2.2.
+
+\begin{enumerate}
+	\item Initialize the weights $w_i$'s to small random values.
+	\item Until termination condition (defined separately), do
+		\begin{enumerate}
+			\item Initialize each $\Delta w_i$ to 0
+			\item For each $\langle \vec{n}, t \rangle \in Data$, do 
+			\begin{enumerate}
+				\item Input $\vec{n}$ and computer output $o$
+				\item For each unit weight $w_i$, do $$\Delta w_i \leftarrow w_i + \alpha(t-o)n_i$$
+			\end{enumerate}
+			\item For each linear unit weight $w_i$, do $$w_i \leftarrow w_i + \Delta w_i$$
+		\end{enumerate}
+\end{enumerate}
 
 
 \subsubsection{ANN with Back-Propagation}
 \subsubsection{ANN with Deep Learning}
 
-Once we have a representation, devise a learning mechanism for training. Suppose now we have a set of positive (games won) training examples $\{<b, V_{train}(b)>\}$. Define the error term using simple sum of squares
+Once we have a representation, devise a learning mechanism for training. Suppose now we have a set of positive (games won) training examples $\{\langle b, V_{train}(b) \rangle\}$. Define the error term using simple sum of squares
 
-$$\mathcal{E} = \sum_{<b, V_{train}(b)> \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
+$$\mathcal{E} = \sum_{\langle b, V_{train}(b) \rangle \in \ {\rm training\ examples}} (V_{train}(b) - \hat{V}_{train}(b))^2$$
 
 Then, using this, devise an algorithm $A$ for training / weight-tuning. The error term above, when differentiated, yields gradient term of $\sim(V_{train}(b) - \hat{V}_{train}(b))$. One can imagine training as nodging a point closer to its true value, and the gradient gives the direction to nodge towards. This gives us a simple LMS algorithm for minimizing $\mathcal{E}$ using that gradient term:
 
