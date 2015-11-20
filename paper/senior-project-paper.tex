@@ -213,13 +213,13 @@ A huge variety of machine learners today are being used for different purposes -
 
 
 
-\subsection{Popular Techniques}
+% \subsection{Popular Techniques}
 
 Before getting to the discussion on the paradigm, we take a quick look at the most common and powerful machine learners. These are derived from the same {\bf stagnant \& singular paradigm} by varying the {\bf representations} and {\bf learning mechanisms}.
 
 
 
-\subsubsection{Decision Tree}
+\subsection{Decision Tree}
 
 Decision tree is a popular method stemmed from artificial intelligence, used for hypothesis-searching and inductive reference. It uses a {\em tree representation}, where each node is a feature variable, and each edge is a value the feature takes on. The leaf nodes are the classification (output) values. Every path from the root to the leaf represents an instance of the feature $b$ and its output $o$. Moreover, different paths can be combined with logical $OR$ and $AND$ to yield a more general hypothesis space.
 
@@ -229,7 +229,7 @@ Each path in the tree is a candidate hypothesis (collection of contributing feat
 
 
 
-\subsubsection{Artificial Neural Network (ANN)}
+\subsection{Artificial Neural Network (ANN)}
 
 Often called just the ``neural net'', ANN was inspired by the biological system of neurons in the brain (note that it is inconsistent with the biological version). This is one of the earliest techniques, and has improved over the decades; the first practical usage was in the 80's, and today it is one of the most popular with countless variations. Here, we will describe the original and the most common designs.
 
@@ -263,7 +263,7 @@ With data $\{\langle b, V(b) \rangle\}$, the training goes as usual. A single it
 
 
 
-\subsubsection{ANN with Perceptrons}
+\subsection{ANN with Perceptrons}
 
 Given the general design above, we can simplify our notations to aid discussions. Focusing on a subnetwork, look at a single output unit $o$ with incoming inputs $x_1, x_2, \cdots, x_k$ and weights $w_1, w_2, \cdots, w_k$, the target function for a perceptron unit is
 \[
@@ -281,7 +281,7 @@ The training rule for the algorithm is a simple update, $$w_i \leftarrow w_i + \
 
 
 
-\subsubsection{ANN with Gradient Descent}
+\subsection{ANN with Gradient Descent}
 
 The gradient descent can be seen as a refinement to the perceptron. Its target function is $$o(\vec{x}) = \vec{w} \cdot \vec{x}$$
 
@@ -313,9 +313,9 @@ Each training example $d \in Data$ is of the form $d = \langle \vec{x}, t \rangl
 
 
 
-\subsubsection{ANN with Backpropagation}
+\subsection{ANN with Backpropagation}
 
-The invention of {\em Backpropagation} reinvigorated ANN after its loss of popularity due to practical limitations. First, we improve the target function by using a sigmoid (logistic) function, yielding a {\em sigmoid unit} $$o = \sigma (\vec{w} \cdot \vec{x})$$ where $$\sigma(y) = \frac{1}{1+e^{-y}}$$ It has some very nice properties. The function maps the entire real domain into $(0,1)$; it increases monotonically; it is smooth with a convenient derivative $\sigma'(y) = \sigma(y) (1 - \sigma(y))$, which is computationally cheap.
+The invention of {\em Backpropagation} by Geoffrey Hinton and Yann LeCun reinvigorated ANN after its loss of popularity due to practical limitations. First, we improve the target function by using a sigmoid (logistic) function, yielding a {\em sigmoid unit} $$o = \sigma (\vec{w} \cdot \vec{x})$$ where $$\sigma(y) = \frac{1}{1+e^{-y}}$$ It has some very nice properties. The function maps the entire real domain into $(0,1)$; it increases monotonically; it is smooth with a convenient derivative $\sigma'(y) = \sigma(y) (1 - \sigma(y))$, which is computationally cheap.
 
 Next, {\em Backpropagation} can efficiently train a large multilayer network. We can directly generalize the error term as the sum over all nodes at a layer, $$\mathcal{E}(\vec{w}) = \frac{1}{2} \sum_{d \in D} \sum_{k \in outputs} (t_{d,k} - o_{d,k})^2$$
 
@@ -349,15 +349,70 @@ Since its invention in the 80's it has become the primary method for ANN. Indeed
 
 
 
-\subsubsection{ANN with Deep Learning (DNN)}
+\subsection{Deep Neural Network (DNN)}
+
+The most popular and powerful machine learning technique today is undoubtedly deep learning, given the impressive accomplishments by \emph{IBM Watson, Facebook M}, and \emph{Google Tensorflow} this year. The theoretical foundation has been around for decades, but it wasn't until now that we have the level of computational power and abundance of data to apply it.
+
+Deep learning is implemented as a Deep Neural Network (DNN), which is itself a neural net. The term \emph{deep} stands for the depth of the hidden layers of DNN. Whereas most ordinary ANNs are ``shallow'' with less than 3 hidden layers, DNNs are ``deeper'' with many (usually over 3) hidden layers. It turns out that having more hidden layers can make a neural net immensely more powerful that it can represent a larger class of functions.
 
 
+Having more hidden layers allows DNNs to progressively generalize features and abstractions. Going from the first to the last hidden layer, a DNN can capture features that are decreasingly specific and increasingly generic. For instance in face recognition, a DNN may capture the specific shades, then the eyes, nose, mouth features, then the shape, and finally a more invariant representation of the face of a person, say Sara in Figure \ref{DNN-fig}. It is the top level generalization that allows it to recognize a person's face regardless of the local variations, such as the head's orientation, the lighting, and the facial expression. In this aspect, DNNs are more ``brain-like'' than other machine learners, as we shall discuss more in depth later.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.9]{images/DNN.png}\\
-\caption{DNN that mimics the hierarchical structure of the brain. Going from left to right, features get generalized from the specifics into more abstract representations. \href{http://devblogs.nvidia.com/parallelforall/accelerate-machine-learning-cudnn-deep-neural-network-library/}{\tt Image source from NVIDIA.}}\label{ANN-fig}
+\caption{DNN that mimics the hierarchical structure of the brain. Going from left (input) to right, features get generalized from the specifics into more generic and abstract representations. \href{http://devblogs.nvidia.com/parallelforall/accelerate-machine-learning-cudnn-deep-neural-network-library/}{\tt Image source from NVIDIA.}}\label{DNN-fig}
 \end{figure}
+
+
+Whereas ANNs are \emph{supervised} (requires the training data to be labeled), There are two types of learning for DNNs, both of which are not supervised. \emph{Semi-supervised learning} is where unlabeled training data is drawn from the same prior distribution as the labeled training data; \emph{self-taught learning} does not have that requirement.
+
+Next, we look at an \emph{autoencoder} - a basic but fundamental component of a DNN.
+
+\subsubsection{Autoencoder}
+
+The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{(x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u )\}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{((x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) )\}$ as usual. Since the outputs are set to the input, we can view autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
+
+We now introduce the tensorial notation used for DNNs.
+
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{ | l | p{10cm} | }
+
+\hline
+$Symbol$ & $Meaning$ \\
+\hline \hline
+$(x^{(i)}_u, y^{(i)})$ & The $i^{th}$ unlabeled data, $y^{(i)} = x^{(i)}$ \\
+\hline
+$(x^{(i)}_l, y^{(i)})$ & The $i^{th}$ labeled data \\
+\hline
+$L_i$ & The $i^{th}$ layer of the net \\
+\hline
+$b^(i)$ & The bias unit at the $i^{th}$ layer, takes no input and outputs 1 with outgoing weight 1. \\
+\hline
+$W^(k)_{ji}$ & The weight going out from the $i^{th}$ node in layer $k$ to the $j^{th}$ node in layer $k+1$. Note the ordering of the indices, which is different from the previous sections. \\
+\hline
+$b^(i)$ & The bias unit at the $i^{th}$ layer, takes no input and outputs 1. In calculation it is the vector of unit entries. \\
+\hline
+$z^{(2)} = W^{(1)} x + b^{(1)}$ & The bias unit at the $i^{th}$ layer, takes no input and outputs 1. In calculation it is the vector of unit entries. \\
+\hline
+\end{tabular}
+\caption{Tensorial notataion for DNNs.}
+\label{tensor-note}
+\end{center}
+\end{table}
+
+
+autoencoders n tensorial notations
+
+% In his book \emph{On Intelligence}$^\ref{Hawkins}$, Hawkins 
+
+Hawkins
+CLA
+Andrew Ng, One learning algorithm
+
+
 
 
 
@@ -374,7 +429,6 @@ T, P, E, b, O
 V, A
 
 
-\subsubsection{SVM}
 
 \subsection{Applications}
 Google translate
@@ -488,9 +542,11 @@ Furthermore, game shifts could be analyzed using the fun function and the aforem
 
 \item Carnegie Mellon University, \emph{NELL: Never-Ending Language Learning}. \url{http://rtw.ml.cmu.edu/rtw/}\label{NELL}
 
-\item Tom M. Mitchell, \emph{Machine Learning}. McGraw-Hill, 1997.\label{Mitchell}
+\item Mitchell, Tom M, \emph{Machine Learning}. New York: McGraw-Hill, 1997.\label{Mitchell}
 
-\item Cybenko., G. (1989) \emph{Approximations by superpositions of sigmoidal functions}, Mathematics of Control, Signals, and Systems, 2 (4), 303-314. \label{Cybenko}
+\item Cybenko., G. \emph{Approximations by superpositions of sigmoidal functions}, Mathematics of Control, Signals, and Systems, 2 (4), 303-314. 1989. \label{Cybenko}
+
+\item Hawkins, Jeff and Blakeslee, Sandra. \emph{On Intelligence.} New York: Henry Holt and, 2005. \label{Hawkins}
 
 
 \end{enumerate}
