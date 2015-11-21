@@ -96,7 +96,7 @@ We conduct a survey study on machine learning, its mathematical foundations, gen
 
 \section{Introduction} \label{intro}
 
-We have just entered the golden age of machine learning. The field has in fact been around for decades, born from artificial intelligence and pattern recognition. It wasn't until recently that we have the level of computational power and the abundance of data to apply it. 
+We have just entered the golden age of machine learning. The field has in fact been around for decades, born from artificial intelligence and pattern recognition. It wasn't until recently that we had the level of computational power and the abundance of data to apply it. 
 
 The machine learners have accomplished some truly astonishing feats. They are systems that are trained with a copious amount of data, which allows them to surpass the performance level of human experts. Today, they are actively being researched and deployed by the biggest tech companies such as Google, IBM, Microsoft, Facebook. In fact, their major products are powered by machine learning - Google Adsense, IBM Watson, and Facebook's M - doing tasks such as ads suggestion, image recognition, medical diagnosis, and natural language processing.
 
@@ -178,7 +178,7 @@ To suit a different type of problem, we can employ a different {\bf representati
 
 
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{center}
 \begin{tabular}{ | l | l | l || l | l | }
 
@@ -351,17 +351,17 @@ Since its invention in the 80's it has become the primary method for ANN. Indeed
 
 \subsection{Deep Neural Network (DNN)}
 
-The most popular and powerful machine learning technique today is undoubtedly deep learning, given the impressive accomplishments by \emph{IBM Watson, Facebook M}, and \emph{Google Tensorflow} this year. The theoretical foundation has been around for decades, but it wasn't until now that we have the level of computational power and abundance of data to apply it.
+The most popular and powerful machine learning technique today is undoubtedly deep learning, given the impressive accomplishments by \emph{IBM Watson, Facebook M}, and \emph{Google Tensorflow} this year. The theoretical foundation has been around for decades, but it wasn't until now that we had the level of computational power and abundance of data to apply it.
 
 Deep learning is implemented as a Deep Neural Network (DNN), which is itself a neural net. The term \emph{deep} stands for the depth of the hidden layers of DNN. Whereas most ordinary ANNs are ``shallow'' with less than 3 hidden layers, DNNs are ``deeper'' with many (usually over 3) hidden layers. It turns out that having more hidden layers can make a neural net immensely more powerful that it can represent a larger class of functions.
 
 
 Having more hidden layers allows DNNs to progressively generalize features and abstractions. Going from the first to the last hidden layer, a DNN can capture features that are decreasingly specific and increasingly generic. For instance in face recognition, a DNN may capture the specific shades, then the eyes, nose, mouth features, then the shape, and finally a more invariant representation of the face of a person, say Sara in Figure \ref{DNN-fig}. It is the top level generalization that allows it to recognize a person's face regardless of the local variations, such as the head's orientation, the lighting, and the facial expression. In this aspect, DNNs are more ``brain-like'' than other machine learners, as we shall discuss more in depth later.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale=0.9]{images/DNN.png}\\
-\caption{DNN that mimics the hierarchical structure of the brain. Going from left (input) to right, features get generalized from the specifics into more generic and abstract representations. \href{http://devblogs.nvidia.com/parallelforall/accelerate-machine-learning-cudnn-deep-neural-network-library/}{\tt Image source from NVIDIA.}}\label{DNN-fig}
+\caption{DNN that mimics the hierarchical structure of the brain. Going from left (input) to right, features get generalized from the specifics into more generic and abstract representations. At the top level (rightmost),  \href{http://devblogs.nvidia.com/parallelforall/accelerate-machine-learning-cudnn-deep-neural-network-library/}{\tt Image source from NVIDIA.}}\label{DNN-fig}
 \end{figure}
 
 
@@ -373,35 +373,53 @@ Next, we look at an \emph{autoencoder} - a basic but fundamental component of a 
 
 The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{(x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u )\}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{((x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) )\}$ as usual. Since the outputs are set to the input, we can view autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.4]{images/autoencoder.png}\\
+\caption{An autoencoder. The units with $+1$ are the bias units. The output units $\sf{\hat{x}_i}$ will try to converge to $x_i$, as autoencoder mimics an identity function. \href{http://deeplearning.stanford.edu/wiki/index.php/File:Autoencoder636.png}{\tt Image source from UFLDL.}}\label{autoencoder-fig}
+\end{figure}
+
+
 We now introduce the tensorial notation used for DNNs.
 
 
-\begin{table}[h]
+\begin{table}[ht]
 \begin{center}
 \begin{tabular}{ | l | p{10cm} | }
 
 \hline
 $Symbol$ & $Meaning$ \\
 \hline \hline
-$(x^{(i)}_u, y^{(i)})$ & The $i^{th}$ unlabeled data, $y^{(i)} = x^{(i)}$ \\
+$x$ & The input features, $x \in \mathcal{R}^n$. \\
 \hline
-$(x^{(i)}_l, y^{(i)})$ & The $i^{th}$ labeled data \\
+$y$ & The target values (vector), $y = x$ for autoencoder. \\
 \hline
-$L_i$ & The $i^{th}$ layer of the net \\
+$(x^{(i)}, y^{(i)})$ & The $i^{th}$ training example. For autoencoders, $y^{(i)} = x^{(i)}$. \\
 \hline
-$b^(i)$ & The bias unit at the $i^{th}$ layer, takes no input and outputs 1 with outgoing weight 1. \\
+$L_l$ & The $l^{th}$ layer of the net. \\
 \hline
-$W^(k)_{ji}$ & The weight going out from the $i^{th}$ node in layer $k$ to the $j^{th}$ node in layer $k+1$. Note the ordering of the indices, which is different from the previous sections. \\
+$b^{(l)}_i$ & The bias unit at layer $l$ that points to unit $i$ in layer $l+1$ (think of it as the edge); outputs 1. \\
 \hline
-$b^(i)$ & The bias unit at the $i^{th}$ layer, takes no input and outputs 1. In calculation it is the vector of unit entries. \\
+$W^{(l)}_{ji}$ & The weight going out from the $i^{th}$ node in layer $k$ to the $j^{th}$ node in layer $k+1$. Note the ordering of the indices, which is different from the previous sections. \\
 \hline
-$z^{(2)} = W^{(1)} x + b^{(1)}$ & The bias unit at the $i^{th}$ layer, takes no input and outputs 1. In calculation it is the vector of unit entries. \\
+$z^{l+1} = W^{(l)} a^{(l)} + b^{(l)}$ & The outputs of all unit from layer $l$, in compact tensorial form. Note that $a^{(1)} = x$. \\
+\hline
+$f(\cdot)$ & The activation function that transforms the input $z$ at each node into the activation $a = f(z)$. Applies element-wise to a tensor. \\
+\hline
+$a^{(l)}$ & Activation, i.e. the transformed outputs of all units at layer. $a^{(l)} = f(z^{(l)})$. \\
+\hline
+$h_{W,b}(x) = a^{(3)} = f(z^{(3)})$ & The hypothesis of an autoencoder, given input features $x$, parametrized by the edge weights in the tensors $W, b$. \\
 \hline
 \end{tabular}
-\caption{Tensorial notataion for DNNs.}
+\caption{Tensorial notation for Autoencoder and DNNs.}
 \label{tensor-note}
 \end{center}
 \end{table}
+
+
+
+
 
 
 autoencoders n tensorial notations
@@ -547,6 +565,8 @@ Furthermore, game shifts could be analyzed using the fun function and the aforem
 \item Cybenko., G. \emph{Approximations by superpositions of sigmoidal functions}, Mathematics of Control, Signals, and Systems, 2 (4), 303-314. 1989. \label{Cybenko}
 
 \item Hawkins, Jeff and Blakeslee, Sandra. \emph{On Intelligence.} New York: Henry Holt and, 2005. \label{Hawkins}
+
+\item Ng, Andrew et. al. \emph{UFLDL Tutorial.} \url{http://deeplearning.stanford.edu/wiki/index.php/UFLDL_Tutorial}\label{UFLDL}
 
 
 \end{enumerate}
