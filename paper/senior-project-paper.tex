@@ -356,13 +356,14 @@ The most popular and powerful machine learning technique today is undoubtedly de
 Deep learning is implemented as a Deep Neural Network (DNN), which is itself a neural net. The term \emph{deep} stands for the depth of the hidden layers of DNN. Whereas most ordinary ANNs are ``shallow'' with less than 3 hidden layers, DNNs are ``deeper'' with many (usually over 3) hidden layers. It turns out that having more hidden layers can make a neural net immensely more powerful that it can represent a larger class of functions.
 
 
-Having more hidden layers allows DNNs to progressively generalize features and abstractions. Going from the first to the last hidden layer, a DNN can capture features that are decreasingly specific and increasingly generic. For instance in face recognition, a DNN may capture the specific shades, then the eyes, nose, mouth features, then the shape, and finally a more invariant representation of the face of a person, say Sara in Figure \ref{DNN-fig}. It is the top level generalization that allows it to recognize a person's face regardless of the local variations, such as the head's orientation, the lighting, and the facial expression. In this aspect, DNNs are more ``brain-like'' than other machine learners, as we shall discuss more in depth later.
-
 \begin{figure}[ht]
 \centering
 \includegraphics[scale=0.9]{images/DNN.png}\\
-\caption{DNN that mimics the hierarchical structure of the brain. Going from left (input) to right, features get generalized from the specifics into more generic and abstract representations. At the top level (rightmost),  \href{http://devblogs.nvidia.com/parallelforall/accelerate-machine-learning-cudnn-deep-neural-network-library/}{\tt Image source from NVIDIA.}}\label{DNN-fig}
+\caption{DNN that mimics the hierarchical structure of the brain. Going from left (input) to right, features get generalized from the specifics into more generic and abstract representations. At the top level (rightmost),  \href{http://devblogs.nvidia.com/parallelforall/accelerate-machine-learning-cudnn-deep-neural-network-library/}{\tt Image from NVIDIA.}}\label{DNN-fig}
 \end{figure}
+
+
+Having more hidden layers allows DNNs to progressively generalize features and abstractions. Going from the first to the last hidden layer, a DNN can capture features that are decreasingly specific and increasingly generic. For instance in face recognition, a DNN may capture the specific shades, then the eyes, nose, mouth features, then the shape, and finally a more invariant representation of the face of a person, say Sara in Figure \ref{DNN-fig}. It is the top level generalization that allows it to recognize a person's face regardless of the local variations, such as the head's orientation, the lighting, and the facial expression. In this aspect, DNNs are more ``brain-like'' than other machine learners, as we shall discuss more in depth later.
 
 
 Whereas ANNs are \emph{supervised} (requires the training data to be labeled), There are two types of learning for DNNs, both of which are not supervised. \emph{Semi-supervised learning} is where unlabeled training data is drawn from the same prior distribution as the labeled training data; \emph{self-taught learning} does not have that requirement.
@@ -371,13 +372,13 @@ Next, we look at an \emph{autoencoder} - a basic but fundamental component of a 
 
 \subsubsection{Autoencoder}
 
-The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{(x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u )\}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{((x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) )\}$ as usual. Since the outputs are set to the input, we can view autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
+The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{(x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) \}$ as usual. Since the outputs are set to the input, we can view autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
 
 
 \begin{figure}[ht]
 \centering
 \includegraphics[scale=0.4]{images/autoencoder.png}\\
-\caption{An autoencoder. The units with $+1$ are the bias units. The output units $\sf{\hat{x}_i}$ will try to converge to $x_i$, as autoencoder mimics an identity function. \href{http://deeplearning.stanford.edu/wiki/index.php/File:Autoencoder636.png}{\tt Image source from UFLDL.}}\label{autoencoder-fig}
+\caption{An autoencoder. The units with $+1$ are the bias units. The output units $\sf{\hat{x}_i}$ will try to converge to $x_i$, as autoencoder mimics an identity function. \href{http://deeplearning.stanford.edu/wiki/index.php/File:Autoencoder636.png}{\tt Image from UFLDL.}}\label{autoencoder-fig}
 \end{figure}
 
 
@@ -405,17 +406,54 @@ $W^{(l)}_{ji}$ & The weight going out from the $i^{th}$ node in layer $k$ to the
 \hline
 $z^{l+1} = W^{(l)} a^{(l)} + b^{(l)}$ & The outputs of all unit from layer $l$, in compact tensorial form. Note that $a^{(1)} = x$. \\
 \hline
-$f(\cdot)$ & The activation function that transforms the input $z$ at each node into the activation $a = f(z)$. Applies element-wise to a tensor. \\
+$f(\cdot)$ & The activation function that transforms the input $z$ at each node into the activation $a = f(z)$. Applies element-wise to a tensor. Typically, we use a sigmoid function $f(z) = 1/(1+e^{-z})$. \\
 \hline
 $a^{(l)}$ & Activation, i.e. the transformed outputs of all units at layer. $a^{(l)} = f(z^{(l)})$. \\
 \hline
 $h_{W,b}(x) = a^{(3)} = f(z^{(3)})$ & The hypothesis of an autoencoder, given input features $x$, parametrized by the edge weights in the tensors $W, b$. \\
 \hline
 \end{tabular}
-\caption{Tensorial notation for Autoencoder and DNNs.}
+\caption{Tensorial notation for DNNs.}
 \label{tensor-note}
 \end{center}
 \end{table}
+
+
+
+
+\subsubsection{Semi-supervised learning}
+
+Deep learning is often semi-supervised. We present a basic architecture consisting of 3 total layers based on an autoencoder and a logistic classifier. This will form the basis for constructing a deep neural net with more hidden layers.
+
+One of the biggest hurdles to machine learing is the scarcity of labeled data. Every data point has to be manually labeled by humans - not every picture of a cat on the web is already tagged with ``cat''. Therefore, the large trove of data today mostly remains unusable by supervised machine learners. This necessitates new approaches - self-taught and unsupervised learning.
+
+
+Given an unlabeled data set $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, perform self-taught learning on an autoencoder. This is called pretraining, which learns and encode the structure of the data in the hidden layers.
+
+, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{(x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) \}$
+
+
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{.45\linewidth}
+\includegraphics[scale=0.6]{images/SparseAE.png}\\
+\caption{Self-taught learning: Pretraining Sparse Autoencoder - simply remove the third layer from the Autoencoder after training. \href{http://deeplearning.stanford.edu/wiki/index.php/Self-Taught_Learning_to_Deep_Networks}{\tt Image from UFLDL.}}\label{sparseAE-fig}
+\end{minipage}
+\hspace{.05\linewidth}
+\begin{minipage}{.45\linewidth}
+\includegraphics[scale=0.7]{images/Logistic_Classifier.png}\\
+\caption{Supervised learning: Training Logistic Classifier using the activation units from the Sparse Autoencoder plus a bias unit. \href{http://deeplearning.stanford.edu/wiki/index.php/Self-Taught_Learning_to_Deep_Networks}{\tt Image from UFLDL.}}\label{LogisClass-fig}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.8]{images/CombinedAE.png}\\
+\caption{Semi-supervised learning as the basis for deep-learning: The network obtained by combining the Sparse Autoencoder from pretraining and the logistic classifier from supervised training. \href{http://deeplearning.stanford.edu/wiki/index.php/Self-Taught_Learning_to_Deep_Networks}{\tt Image from UFLDL.}}\label{combinedAE-fig}
+\end{figure}
+
 
 
 
