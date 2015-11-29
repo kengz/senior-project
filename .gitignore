@@ -12,6 +12,7 @@ node_modules/
 *.synctex.gz
 *.cls
 *.toc
+*.fls
 
 # Other files and folders
 .settings/

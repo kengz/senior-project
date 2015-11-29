@@ -7,6 +7,7 @@
 %Packages to load which give you useful commands
 \usepackage{subfig}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{hyperref}
 \usepackage{amssymb, amsmath, amsthm}
 
@@ -315,7 +316,7 @@ Each training example $d \in Data$ is of the form $d = \langle \vec{x}, t \rangl
 
 \subsection{ANN with Backpropagation}
 
-The invention of {\em Backpropagation} by Geoffrey Hinton and Yann LeCun reinvigorated ANN after its loss of popularity due to practical limitations. First, we improve the target function by using a sigmoid (logistic) function, yielding a {\em sigmoid unit} $$o = \sigma (\vec{w} \cdot \vec{x})$$ where $$\sigma(y) = \frac{1}{1+e^{-y}}$$ It has some very nice properties. The function maps the entire real domain into $(0,1)$; it increases monotonically; it is smooth with a convenient derivative $\sigma'(y) = \sigma(y) (1 - \sigma(y))$, which is computationally cheap.
+The invention of {\em Backpropagation} by Geoffrey Hinton and Yann LeCun reinvigorated ANN after its loss of popularity due to practical limitations. First, we improve the target function by using a sigmoid (logistic) function, yielding a {\em sigmoid unit} $$o = \sigma (\vec{w} \cdot \vec{x})$$ where $$\sigma(y) = \frac{1}{1+e^{-y}}$$ It has some very nice properties. The function maps the entire real domain into $(0,1)$ like a ``squeezing function'' with the outlier points getting pushed to the narrow ends of the interval; it increases monotonically; it is smooth with a convenient derivative $\sigma'(y) = \sigma(y) (1 - \sigma(y))$, which is computationally cheap.
 
 Next, {\em Backpropagation} can efficiently train a large multilayer network. We can directly generalize the error term as the sum over all nodes at a layer, $$\mathcal{E}(\vec{w}) = \frac{1}{2} \sum_{d \in D} \sum_{k \in outputs} (t_{d,k} - o_{d,k})^2$$
 
@@ -372,7 +373,7 @@ Next, we look at an \emph{autoencoder} - a basic but fundamental component of a 
 
 \subsubsection{Autoencoder}
 
-The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{(x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) \}$ as usual. Since the outputs are set to the input, we can view autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
+The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{(x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) \}$ as usual. Since the outputs are set to the input, we can view the autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
 
 
 \begin{figure}[ht]
@@ -421,16 +422,13 @@ $h_{W,b}(x) = a^{(3)} = f(z^{(3)})$ & The hypothesis of an autoencoder, given in
 
 
 
-\subsubsection{Semi-supervised learning}
+\subsubsection{Hybrid Method}
 
-Deep learning is often semi-supervised. We present a basic architecture consisting of 3 total layers based on an autoencoder and a logistic classifier. This will form the basis for constructing a deep neural net with more hidden layers.
+One of the biggest hurdles to machine learing is the scarcity of labeled data. Every data point has to be manually labeled by humans - not every picture of a cat on the web is already tagged with ``cat''. Therefore, despite having a large trove of data today, most of it is unlabeled and thus remains unusable by supervised machine learners. 
 
-One of the biggest hurdles to machine learing is the scarcity of labeled data. Every data point has to be manually labeled by humans - not every picture of a cat on the web is already tagged with ``cat''. Therefore, the large trove of data today mostly remains unusable by supervised machine learners. This necessitates new approaches - self-taught and unsupervised learning.
+The problem necessitates new approaches to make use of the unlabeled data - self-taught learning and semi-supervised learning as mentioned in the section on Autoencoders. However, a machine trained solely by these methods only learns the structure of the data, and cannot be very useful as its output approximates its input - it cannot be used as a general predictor.
 
-
-Given an unlabeled data set $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, perform self-taught learning on an autoencoder. This is called pretraining, which learns and encode the structure of the data in the hidden layers.
-
-, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{(x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) \}$
+Fortunately, we can do better by utilizing both the unlabeled and labeled data sets via a hybrid approach. First, we train the autoencoder to ``memorize'' the structure of the unlabeled data - this is called \emph{pretraining}. Then, we replace its output layer with a supervised ANN, and train the new network on the labeled data - this is called \emph{fine-tuning}. The result can have a far greater representational power. This is the basis of a DNN, and is illustrated in Figure \ref{sparseAE-fig}, \ref{LogisClass-fig} and \ref{combinedAE-fig}.
 
 
 
@@ -443,8 +441,9 @@ Given an unlabeled data set $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, perf
 \hspace{.05\linewidth}
 \begin{minipage}{.45\linewidth}
 \includegraphics[scale=0.7]{images/Logistic_Classifier.png}\\
-\caption{Supervised learning: Training Logistic Classifier using the activation units from the Sparse Autoencoder plus a bias unit. \href{http://deeplearning.stanford.edu/wiki/index.php/Self-Taught_Learning_to_Deep_Networks}{\tt Image from UFLDL.}}\label{LogisClass-fig}
+\caption{Supervised learning: Training Logistic Classifier (an ANN) using the activation units from the Sparse Autoencoder plus a bias unit. \href{http://deeplearning.stanford.edu/wiki/index.php/Self-Taught_Learning_to_Deep_Networks}{\tt Image from UFLDL.}}\label{LogisClass-fig}
 \end{minipage}
+
 \end{figure}
 
 
@@ -453,6 +452,88 @@ Given an unlabeled data set $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, perf
 \includegraphics[scale=0.8]{images/CombinedAE.png}\\
 \caption{Semi-supervised learning as the basis for deep-learning: The network obtained by combining the Sparse Autoencoder from pretraining and the logistic classifier from supervised training. \href{http://deeplearning.stanford.edu/wiki/index.php/Self-Taught_Learning_to_Deep_Networks}{\tt Image from UFLDL.}}\label{combinedAE-fig}
 \end{figure}
+
+
+The intuition is that \emph{pretraining} ``coarse-tunes'' the hidden layers into a guided configuration (of edge weights), which gives a better headstart than random weight initialization for training (\emph{fine-tuning}) on the labeled data set. As mentioned, this requires a large set of unlabeled training data. On top of that, we must have a comparably large set of labeled training data to use \emph{fine-tuning}. This hybrid method will significantly improve the performance of the network, and is key to the tremendous power of DNNs.
+
+
+
+
+
+
+\subsubsection{Stacked Autoencoders}
+
+Before we present a sample construction for a deep network with more hidden layers, two design features are crucial to making DNNs powerful and practical:
+
+\begin{enumerate}
+	\item The activation function $f(\cdot)$ must be non-linear. Otherwise, when composing the functions over the layers, the linear composition of linear functions is also linear, and thus would result is a far more restrictive representational power. Commonly the non-linear activation function of choice is the sigmoid function.
+	\item ``Compactness'' can be achieved in the sense that $k$ hidden layers can represent what $k-1$ layers cannot unless the latter has exponentially more hidden units. Whereas to increase the representational power by adding a hidden layer, the number of units only grows polynomially. The deeper the network, the more powerful it is.
+\end{enumerate}
+
+
+Having more hidden layers also pose the following problems.
+
+\begin{enumerate}
+	\item \emph{Diffusion} occurs, in which the error adjustment during backpropagation with gradient descent diminishes across layers. This makes it harder for the front layers closer to the input to converge.
+	\item A much larger amount of data is needed for training, and in some applications this is unfeasible.
+	\item The functions approximated by the deeper network is highly non-convex, and therefore may converge to some bad local optima.
+\end{enumerate}
+
+The solutions to these are
+
+\begin{enumerate}
+	\item Greedy layer-wise training: train the network with $l$ layers, then add another hidden layer and retrain the network with $l+1$ layers.
+	\item Utilize the abundant unlabeled data via \emph{pretraining}.
+	\item After pretraining, the starting point is better, and \emph{fine-tuning} will often lead to a good local optima in practice.
+\end{enumerate}
+
+
+Generalizing from the previous construction, we now look at the \emph{Stacked Autoencoders}. The extension is straightforward. Below, we use the greedy layer-wise training on the autoencoder - train the network with $l$ layers, then stack another autoencoder on top and retrain the network with $l+1$ layers, therefore the name \emph{stacked autoencoder}.
+
+Formally, a \emph{stacked autoencoder} is network of multiple layers of autoencoders. Each autoencoder (of 3 layers in total) at layer $l$ is trained on unlabeled data, then stripped of its output layer. The output from its hidden layer is then used as the input layer of the next added autoencoder at layer $l+1$ (thus adding a hidden and an output layer with the proper bias units). This process repeats up until we have the desired number of hidden layers. The training at layer $l$ for the autoencoder can be done locally while freezing the parameters of the other layers, which the input is injected and propagated to it from the first input layer of the network.
+
+The activation units at layer $l$ is written in the tensorial notation as 
+$$a^{(l)} = f(z^{(l)})$$
+$$z^{(l+1)} = W^{(l)}a^{(l)} + b^{(l)}$$
+
+Finally, when the greedy layer-wise pretraining using the unlabeled data is complete, a classifier (logistic, softmax, etc.) is added to the end of the network. We can now perform \emph{fine-tuning} – supervised training using the labeled data. The weights of the other layers shall now be allowed to change, as the entire network is being tuned. Backpropagation with gradient descent can be a good method for fine-tuning.
+
+We give explicit illustrations of a deep network, which is a stacked autoencoder with 2 hidden layers, in Figure \ref{deep1}, \ref{deep2}, \ref{deep3}, \ref{deep4} that are easier to grasp visually.
+
+
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{.45\linewidth}
+\includegraphics[scale=1]{images/deep_1.png}\\
+\caption{The first autoencoder, pretraining on the unlabeled data set with 6 input dimensions, and 4 hidden units. The pretraining will tune the edge weights to capture the first-order structure of the data. The output layer will then be discarded for adding the next autoencoder. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep1}
+\end{minipage}
+\hspace{.05\linewidth}
+\begin{minipage}{.45\linewidth}
+\includegraphics[scale=1]{images/deep_2.png}\\
+\caption{The second autoencoder. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep2}
+\end{minipage}
+
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.9]{images/deep_3.png}\\
+\caption{Self-taught learning: Pretraining Sparse Autoencoder - simply remove the third layer from the Autoencoder after training. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep3}
+\end{figure}
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.9]{images/deep_4.png}\\
+\caption{Supervised learning: Training Logistic Classifier (an ANN) using the activation units from the Sparse Autoencoder plus a bias unit. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep4}
+\end{figure}
+
+
+
+
 
 
 
