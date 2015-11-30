@@ -220,17 +220,17 @@ Before getting to the discussion on the paradigm, we take a quick look at the mo
 
 
 
-\subsection{Decision Tree}
+% \section{Decision Tree}
 
-Decision tree is a popular method stemmed from artificial intelligence, used for hypothesis-searching and inductive reference. It uses a {\em tree representation}, where each node is a feature variable, and each edge is a value the feature takes on. The leaf nodes are the classification (output) values. Every path from the root to the leaf represents an instance of the feature $b$ and its output $o$. Moreover, different paths can be combined with logical $OR$ and $AND$ to yield a more general hypothesis space.
+% Decision tree is an old method stemmed from artificial intelligence, used for hypothesis-searching and inductive reference. It uses a {\em tree representation}, where each node is a feature variable, and each edge is a value the feature takes on. The leaf nodes are the classification (output) values. Every path from the root to the leaf represents an instance of the feature $b$ and its output $o$. Moreover, different paths can be combined with logical $OR$ and $AND$ to yield a more general hypothesis space.
 
-For the {\em learning mechanism}, a common method is to use the entropy measure and entropy gain while branching on each node (making a decision) while descending the tree. Suppose the data has $c$ classifications (e.g. $c=2$ for binary classifiers), the entropy is defined as $$Entropy(D) = \sum_{i=1}^{c} -p_i \ log_2 \ p_i$$ where $D$ is the data, $p_i$ is the proportion of samples of class $i$ in $D$. This allows us to judge the performance $P$ and search for the target function $\hat{V}$ by using the entropy gain for each feature $b$, $$Gain(D,b) = Entropy(D) - \sum_{v\in Values(b)} \frac{|D_v|}{D} Entropy(D_v)$$ where $D_v$ is the subset of D whose feature vector assumes the values equals to $v$.
+% For the {\em learning mechanism}, a common method is to use the entropy measure and entropy gain while branching on each node (making a decision) while descending the tree. Suppose the data has $c$ classifications (e.g. $c=2$ for binary classifiers), the entropy is defined as $$Entropy(D) = \sum_{i=1}^{c} -p_i \ log_2 \ p_i$$ where $D$ is the data, $p_i$ is the proportion of samples of class $i$ in $D$. This allows us to judge the performance $P$ and search for the target function $\hat{V}$ by using the entropy gain for each feature $b$, $$Gain(D,b) = Entropy(D) - \sum_{v\in Values(b)} \frac{|D_v|}{D} Entropy(D_v)$$ where $D_v$ is the subset of D whose feature vector assumes the values equals to $v$.
 
-Each path in the tree is a candidate hypothesis (collection of contributing features) to consider. Given the multitude of paths in the tree, the algorithm will end up with a set valid and consistent hypotheses. To resolve this, we simply use the {\bf Occam's razor} - choose the simplest hypothesis that fits the data. This will also prevent the initial overfitting.
+% Each path in the tree is a candidate hypothesis (collection of contributing features) to consider. Given the multitude of paths in the tree, the algorithm will end up with a set valid and consistent hypotheses. To resolve this, we simply use the {\bf Occam's razor} - choose the simplest hypothesis that fits the data. This will also prevent the initial overfitting.
 
 
 
-\subsection{Artificial Neural Network (ANN)}
+\section{Artificial Neural Network (ANN)}
 
 Often called just the ``neural net'', ANN was inspired by the biological system of neurons in the brain (note that it is inconsistent with the biological version). This is one of the earliest techniques, and has improved over the decades; the first practical usage was in the 80's, and today it is one of the most popular with countless variations. Here, we will describe the original and the most common designs.
 
@@ -350,7 +350,7 @@ Since its invention in the 80's it has become the primary method for ANN. Indeed
 
 
 
-\subsection{Deep Neural Network (DNN)}
+\section{Deep Neural Network (DNN)}
 
 The most popular and powerful machine learning technique today is undoubtedly deep learning, given the impressive accomplishments by \emph{IBM Watson, Facebook M}, and \emph{Google Tensorflow} this year. The theoretical foundation has been around for decades, but it wasn't until now that we had the level of computational power and abundance of data to apply it.
 
@@ -371,7 +371,7 @@ Whereas ANNs are \emph{supervised} (requires the training data to be labeled), T
 
 Next, we look at an \emph{autoencoder} - a basic but fundamental component of a DNN.
 
-\subsubsection{Autoencoder}
+\subsection{Autoencoder}
 
 The autoencoder is a neural net that learns the structure from an unlabeled data set. It has one hidden layer; the non-output layers (the first two) each has an extra \emph{bias} neuron that accepts no input and constantly outputs 1. Given an unlabeled data set of $n$ points, subscripted with $u$, $\{x^{(1)}_u, x^{(2)}_u, \cdots, x^{(n)}_u \}$, the autoencoder sets the outputs $y^{(i)} = x^{(i)}_u$, and train on the data $\{(x^{(1)}_u, y^{(1)}), \cdots, (x^{(n)}_u, y^{(n)}) \}$ as usual. Since the outputs are set to the input, we can view the autoencoder as a neural net that learns the identity function, and its tuned weights would uncover the structure in the data.
 
@@ -422,7 +422,7 @@ $h_{W,b}(x) = a^{(3)} = f(z^{(3)})$ & The hypothesis of an autoencoder, given in
 
 
 
-\subsubsection{Hybrid Method}
+\subsection{Hybrid Method}
 
 One of the biggest hurdles to machine learing is the scarcity of labeled data. Every data point has to be manually labeled by humans - not every picture of a cat on the web is already tagged with ``cat''. Therefore, despite having a large trove of data today, most of it is unlabeled and thus remains unusable by supervised machine learners. 
 
@@ -461,7 +461,7 @@ The intuition is that \emph{pretraining} ``coarse-tunes'' the hidden layers into
 
 
 
-\subsubsection{Stacked Autoencoders}
+\subsection{Stacked Autoencoders}
 
 Before we present a sample construction for a deep network with more hidden layers, two design features are crucial to making DNNs powerful and practical:
 
@@ -502,42 +502,62 @@ We give explicit illustrations of a deep network, which is a stacked autoencoder
 
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{minipage}{.45\linewidth}
 \includegraphics[scale=1]{images/deep_1.png}\\
-\caption{The first autoencoder, pretraining on the unlabeled data set with 6 input dimensions, and 4 hidden units. The pretraining will tune the edge weights to capture the first-order structure of the data. The output layer will then be discarded for adding the next autoencoder. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep1}
+\caption{The first autoencoder, pretraining on the unlabeled data set with 6 input dimensions, and 4 hidden units. The pretraining will tune the edge weights to capture the first-order structure of the data. The output layer will then be discarded for stacking the next autoencoder. This process repeats for as many stacked autoencoders as desired. Once the pretraining is completely done, the last output layer is stripped for stacking a final classifier. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep1}
 \end{minipage}
 \hspace{.05\linewidth}
 \begin{minipage}{.45\linewidth}
 \includegraphics[scale=1]{images/deep_2.png}\\
-\caption{The second autoencoder. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep2}
+\caption{The second autoencoder. Then input layer is the hidden layer from the first autoencoder plus a bias unit. While pretraining this autoencoder, the edge weights for all the other layers are frozen. This autoencoder takes the feature output from the first and learns from it, thereby capturing the second-order structure of the data. In general, stacking an extra autoencoder involves using the feature output from the previous as input, adding a hidden and an output layer, and pretrain locally on the same unlabeled data set. The output layer is always removed afterward. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep2}
 \end{minipage}
-
 \end{figure}
 
 
-\begin{figure}[ht]
+
+
+\begin{figure}[H]
 \centering
-\includegraphics[scale=0.9]{images/deep_3.png}\\
-\caption{Self-taught learning: Pretraining Sparse Autoencoder - simply remove the third layer from the Autoencoder after training. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep3}
-\end{figure}
+\includegraphics[scale=1.1]{images/deep_3.png}\\
+\caption{Pretraining is done for two hidden layers; the final (softmax regressor) 3-classifier is attached.  \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep3}
+% \end{figure}
 
+\hspace{.1\linewidth}
 
-
-\begin{figure}[ht]
+% \begin{figure}[ht]
 \centering
-\includegraphics[scale=0.9]{images/deep_4.png}\\
-\caption{Supervised learning: Training Logistic Classifier (an ANN) using the activation units from the Sparse Autoencoder plus a bias unit. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep4}
+\includegraphics[scale=1.3]{images/deep_4.png}\\
+\caption{The resultant deep neural network of 2 hidden layers and a softmax classifier. Fine-tuning can be done on the whole network using backpropagation with gradient descent. The DNN takes in 6 input features $x_1, \cdots, x_6$ to predict the probabilities for 3 possible outcomes $\{0, 1, 2\}$. \href{http://deeplearning.stanford.edu/wiki/index.php/Stacked_Autoencoders}{\tt Image from UFLDL.}}\label{deep4}
 \end{figure}
 
 
+The are two popular yet simple choices of classifiers (ANNs that predict classes of outputs) - \emph{logistic regression} and the \emph{softmax regression} classifiers. The \emph{logistic classifier} is used for outputs that are not mutually exclusive, such as the color and size of a cat. Whereas the \emph{softmax classifier} is for mutually exclusive outputs, such as numerical digits.
+
+
+
+\subsection{Variants of Deep Networks}
+
+There are countless variants of deep networks, but their architectures are based off essentially the same ideas - make use of vast amount of data, and adding more hidden layers while still maintaining computational feasibility. They are primarily different in the training techniques, and the propagation of inputs across the network. We give a few of them with quick descriptions.
+
+\begin{enumerate}
+	\item {\bf Convolutional Neural Network (ConvNet):} Each layer tends to be arranged into a 2D matrix or pixels, and pooling is done - capturing the statistical properties of a submatrix (a section of the full pixels), such as the max value or the average, and passing it to a pixel on the next layer. This is particularly useful in computer vision, as pooling can capture many local structures such as colors and corners across the layers (such as the example shown in Figure \ref{DNN-fig}).
+	\item {\bf Recurrent Neural Network (RNN):} Unlike most neural nets that are feed-forward directed acyclic graphs (DAGs), RNN allows feedback cycles. This allows the output to contribute back to the next inputs, therefore has a strong temporal feature. It's is mostly used for handwriting and speech recognition, in which temporal order plays vital role in making sense of the data.
+	\item {\bf Restricted Boltzman Machine (RBM):} This is a feedforward neural net that utilizes special energy function and training algorithm involving Gibbs sampling and Boltzmann distribution. The term ``Restricted'' implies that the hidden and visible layers must form a bipartite graph.
+\end{enumerate}
 
 
 
 
 
 
+\section{Applications}
+Google translate
+google ad sense
+google deep dream, deep mind
+Google deep learning (play game!)
+IBM watson
 
 
 
@@ -551,28 +571,6 @@ Andrew Ng, One learning algorithm
 
 
 
-
-
-
-performance, 3 layers few units suff to approx most functions?
-
-Each round of training takes the input 
-
-
-Input layers X
-output layers
-recursive propagation
-T, P, E, b, O
-V, A
-
-
-
-\subsection{Applications}
-Google translate
-google ad sense
-google deep dream, deep mind
-Google deep learning (play game!)
-IBM watson
 
 
 \subsection{Paradigm: Powers \& Limitations}
