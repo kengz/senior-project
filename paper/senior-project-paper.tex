@@ -569,7 +569,7 @@ When Google had its first try at creating artificial intelligence, they did not 
 
 Decades ago linguists have tried to come up with the ultimate algorithm that captures Chomsky's idea of universal grammar - a simple, unifying formal grammar that will capture any human languages. The program had proven most challenging, when even the most respected linguists and computer scientists could not devise an algorithm that could parse and translate between different languages. Despite decades of attempts, we have not come close to realizing Chomsky's original proposition.
 
-Then, Google started its own project, which would then be known as Google Translate. At that time, Google already has a sufficiently large amount of translated texts, say between English and French. Instead of devising a bunch of production rules and algorithms, the team decided to go the unusual way - feeding the vast amount of translated texts they had into a neural net. Much to their surprise, it worked, and Google Translate was born. The result was much better than any carefully devised algorithms. No one knew how, but \emph{it worked}. No wonder neural nets are often called a ``black box'', because there is nothing else other than the network and edge weights. If you feed enough data and teaches it about the output, it picks up on the pattern. Neural nets also help Google filter out $99.9\%$ of the spams in Gmail.
+Then, Google started its own project, which would then become Google Translate. At that time, Google already had a sufficiently large amount of translated texts, for example between English and French. Instead of devising a collection of production rules and algorithms, the team stuck with an unusual approach - feeding the vast amount of translated texts they had into a neural net. Much to their surprise, it worked, and Google Translate was born. The result was much better than any carefully devised algorithms. No one knew how, but \emph{it worked}. No wonder neural nets are often called a ``black box'', because there is nothing else other than the network and edge weights. If you feed enough data and teaches it about the output, it picks up on the pattern. Neural nets also help Google filter out $99.9\%$ of the spams in Gmail.
 
 
 2015 is a big year for machine learning - deep networks especially. Google showed off its deep learner that can quickly learn and play games on a super-human level. Google Deep Dream is another publicity stunt, in which an image recognizer spits out new psychedelic images when reversed - it ``dreams'' up images instead of recognizing. IBM Watson got its deep learning upgrade and learned to diagnose diseases and invent new cooking recipe. Facebook released $M$, their A.I. virtual assistant on the \emph{Messenger} app. Weeks after in November 2015, Google open sourced \emph{TensorFlow}, their machine learning library. We will take a quick look at it.
@@ -578,7 +578,6 @@ Then, Google started its own project, which would then be known as Google Transl
 \subsection{TensorFlow}
 
 
-autoencoders n tensorial notations
 
 % In his book \emph{On Intelligence}$^\ref{Hawkins}$, Hawkins 
 
@@ -590,98 +589,9 @@ Andrew Ng, One learning algorithm
 
 
 
-\subsection{Paradigm: Powers \& Limitations}
-
-
-
-\section{NELL as a New Paradigm}
-
-\subsection{Inspiration \& Features}
-\subsection{Architecture}
-\subsection{Applications}
-\subsection{Powers \& Limitations}
-
-
-
-\section{NELL for Stock Market Prediction}
-
-\subsection{Problem statement}
-\subsection{Potential of NELL}
-\subsection{Design}
-\subsection{Implementation}
-\subsection{Assessment}
-
 
 \section{Future Work}
 
-
-
-
-
-
-\subsection{Results, Performance, and Analysis }
-We immediately see several trends given by the fun function. A clear player order effect was found between nearly every AI. While some AI’s were simply more powerful and able to win regardless of characteristics, in nearly every case we see that more wins are generated from the AI if they play first compared to when they play second. For some more closely related AI’s, the odds of winning changes in its favor given the player order effect. From this we can conclude that for certain comparable AI’s, player order may greatly affect the outcome of the game. 
-
-Furthermore, in every case, the trend line from the total army plot simply shifted its intercept value but held consistent slope. This intercept can be credited to first round play. After the first round (when the first point is calculated) the army advantage can be a one player advantage. This first round however rarely changes the results of the game. Consider figure 1. 
-
-\begin{center}
-% \includegraphics[scale=0.6]{images/Figure_1.jpg}\\
-{\footnotesize Figure 1.}
-\end{center}
-
-Here the green and red dots represent AI0’s and AI4’s percent total armies respectively over time. Again, the dots only represent games in which a definitive winner was found. Here we see that AI0 has a clear advantage but when the player order is changed, AI4 wins more games. Notice, however, while the trend line shifts down, that the slope stays constant. This implies that while the game is certainly affected by player order, on average, the game develops the same regardless of player order. 
-
-For the same AI match, the fun function provides two survival charts. Now consider figure 2. 
-
-
-\begin{center}
-% \includegraphics[scale=0.6]{images/Figure_2.jpg}\\
-{\footnotesize Figure 2.}
-\end{center}
-
-In the first plot we see that player two holds several armies until near round 50. Suddenly over the next two rounds however, we see an incredible drop off. AI0 has mostly defensive characteristics. From this it appears that AI0 condenses its portion of the graph and builds armies. Somewhere near halfway through the game, it branches out and gains several territories in a very small period of time. When the order of the game is reversed we see a much more even trend. Both AI’s seem to lose armies at a consistent rate. This effect could be accredited to player order effect or the characteristics of the players in regards to their section of the sub graph. 
-
-
-While these trends, in general, hold true, one AI in particular defied the general trends. We will call this AI, AI3. AI3, in general, tended to produce more wins when playing in the second player position. This trend was tested more rigorously against 15 new AI’s. From this data, the fun function produced the win records for both AI3 and the other AI’s for both player order. The difference between wins was then calculated. That is $\Delta \emph{win} = \emph{AI3\_wins} - \emph{AIOpponent\_wins}$. This figure was calculated for both player orders. This data is represented in figure 3.
-
-
-
-\begin{center}
-% \includegraphics[scale=0.6]{images/Figure_3.jpg}\\
-{\footnotesize Figure 3.}
-\end{center}
-
-
-As in figure 3, on average AI3 wins 3.625 games while playing second in comparison to playing first where the AI won only 0.5 games on average. This in turn would seem to offer a solution to the player order effect, mentioned above. By simply playing the AI3 characteristics (“Survival”, “Defensive”, “Cautious”, “Carry”), on average the advantage would go to the second player, thus making player order obsolete. 
-
-
-Another nuanced observation shows that this conclusion may not be entirely true. Under further observation, another AI which we will call AI4 (“Survival”, “Aggressive”, “Tactical”, “Rusher”) seemed to be superior to AI3 in both player orders. A more rigorous study of these two AI’s revealed that the assumption was correct. The fun function showed that on average, AI4 wins more often than AI3. Consider figure 4 and figure 5. 
-
-
-
-\begin{center}
-% \includegraphics[scale=0.6]{images/Figure_4.jpg}\\
-{\footnotesize Figure 4.}\\
-% \includegraphics[scale=0.6]{images/Figure_5.jpg}\\
-{\footnotesize Figure 5.}
-\end{center}
-
-Notice that these two figures show very low correlation when player order changes. When AI3 goes first, it grosses more wins than AI4. When AI3 goes second, however, AI4 wins the majority of the games. While by a narrow margin, when AI4 goes first, AI4 wins 56 more games than AI3 in a 500 game trial. Thus if AI3 plays second they will on average lose to AI4. 
-
-
-\subsection{AI behaviors and Surprises}
-In this project several AI’s were posed against each other in a game of Risk. Initially, it was predicted that a large player order effect would affect the game. This hypothesis held true for the majority of AI’s that were tested in this experiment. AI3 however, proved that by using the correct strategy, a player would actually hold an advantage by going second in the game. From this however, AI4 proved that their still exist AI’s that can beat AI3 while being the first player to move. 
-
-From this project, we advise future Risk players to abstain from declaring their player strategy until the player order is determined. From this, we advise that second players play a cautious, defensive game, while first players play with aggressive tendencies. A consistent analysis of strategy will reveal the best strategy for either player to take throughout the duration of the game. 
-
-
-
-\section{Conclusion}
-We have reformalized the board game \emph{Risk} as a graph optimization, and implemented an AI to solve the problem, i.e. to play the game. Several decision algorithms were devised based on graph properties, and they in turn form the personalities of the AI. Our study of 4 binary traits, or a total of 16 personality variations of the AI, is merely the beginning. We have discovered some interesting AI behaviours and performance at a level beyond any human players. One can potentially investigate even more variations of the traits.
-
-For future studies, an analysis of subgraphs would provide deep insight into the value of individual territories. The AI’s are built in such a way that the priority function is based off of current demographic of troops and shape of their graph. Evaluating the graph as a whole would provide insight to the value of different subgraphs that would proactively affect the priority function. This conditional thinking is much more like the ideas of a human player and thus could inform future strategies. 
-
-Furthermore, game shifts could be analyzed using the fun function and the aforementioned subgraph analysis. This would allow for defensive players an understanding of which territories that are worth defending and worth conceding. This shift parameter would allow for insight to game length, army distribution, and other key factors.  
 
 
 
@@ -701,6 +611,8 @@ Furthermore, game shifts could be analyzed using the fun function and the aforem
 \item Hawkins, Jeff and Blakeslee, Sandra. \emph{On Intelligence.} New York: Henry Holt and, 2005. \label{Hawkins}
 
 \item Ng, Andrew et. al. \emph{UFLDL Tutorial.} \url{http://deeplearning.stanford.edu/wiki/index.php/UFLDL_Tutorial}\label{UFLDL}
+
+\item Dean, Jeffrey et. al. \emph{TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems}, Google Research. 2015. \label{tensorflow_paper}
 
 
 \end{enumerate}
