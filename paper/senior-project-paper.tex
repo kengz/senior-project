@@ -58,7 +58,7 @@
 
 \begin{document}
 
-\title{Senior Project (draft)\\
+\title{Senior Project\\
 Lafayette College \\
 Department of Mathematics
 }
@@ -83,7 +83,8 @@ kengw{\tt @}lafayette.edu.}
 
 
 \begin{abstract}
-We conduct a survey study on machine learning, its mathematical foundations, general techniques, and the latest progress in both the academia and the industry. However, most machine learners  excel only at the task they are trained for - this is a huge limitation. Motivated by this, we study a new paradigm called the Never-Ending Language Learning (NELL)$^{\ref{NELL}}$ and its potentials to overcome the singular nature of machine learners. Lastly, we design and implement a system based on NELL to predict the stock market performance. This is driven by the abundance of data, and the complex, interacting, non-singular nature of the task that a machine learner has yet to match a human on.
+
+This paper gives a gentle introduction to artificial neural networks, focusing on the mathematical foundation and industrial applications. We include the core concepts and algorithms organized systematically and simplified with tensorial notations. Moreover, we build up the topics from the simpler, fundamental components, going from the perceptron artificial neural net, gradient descent, backpropagation, to autoencoders and deep neural net. The latest progresses in research and industrial applications are included for relevance. Finally, we briefly describe TensorFlow, and discuss the future of artificial intelligence.
 \end{abstract}
 
 
@@ -205,19 +206,7 @@ ads suggestion & ads click rate & ads metadata & user profile & ads displayed \\
 
 Moreover, we can employ different {\bf learning mechanisms} - which we define as the set of target function and learning algorithm, $\{\hat{V}, A\}$. This gives rise to the different techniques, or types, of machine learners such as the Neural Nets, Support Vector Machines, Deep Learning and etc. We will investigate the popular types in the next section.
 
-A huge variety of machine learners today are being used for different purposes - most of the leading tech companies tweak and design their own. They may have very different {\bf representations} and {\bf learning mechanisms}, but the overall idea is still the same - gather labeled data, define the representations and learning algorithms, and train. The entire process is very modular, and the resultant machines are {\bf stagnant} - the machine no longer improve once training is done; and {\bf singular} - they can only function very narrowly only on the tasks they are trained for. For our discussions, we call this the {\bf stagnant \& singular paradigm}. In fact, this paradigm can readily be observed across most of the popular machine learners today. This will serve as the primary motivation of our work.
-
-
-
-
-
-
-
-
-
-% \subsection{Popular Techniques}
-
-Before getting to the discussion on the paradigm, we take a quick look at the most common and powerful machine learners. These are derived from the same {\bf stagnant \& singular paradigm} by varying the {\bf representations} and {\bf learning mechanisms}.
+A huge variety of machine learners today are being used for different purposes - most of the leading tech companies tweak and design their own. They may have very different {\bf representations} and {\bf learning mechanisms}, but the overall idea is still the same - gather labeled data, define the representations and learning algorithms, and train. The entire process is very modular, and the resultant machines are {\bf stagnant} - the machine no longer improve once training is done; and {\bf singular} - they can only function very narrowly only on the tasks they are trained for. For our discussions, we call this the {\bf stagnant \& singular paradigm}. In fact, this paradigm can readily be observed across most of the popular machine learners today. It must be overcome, as we will see when we describe the human cognitive model in Section \ref{one-alg}. Now, we take a look at the most common and powerful machine learners. These are derived from the same {\bf stagnant \& singular paradigm} by varying the {\bf representations} and {\bf learning mechanisms}.
 
 
 
@@ -694,12 +683,11 @@ Their research goal is to study and model the abstract human cognitive capabilit
 
 
 
-\subsection{One-learning Algorithm}
+\subsection{One-learning Algorithm}\label{one-alg}
 
-In the book \emph{On Intelligence}$^{\ref{Hawkins}}$, Hawkins presented his findings about the human neural system. He worked closely with biologists and neuroscientists, carefully dissected and studied the neurons and how they work on the micro and macro levels. What he found was that neurons are not specialized, but are rather adaptive. In other words, all neurons are the same, and they can be used to learn anything humans do.
+In the book \emph{On Intelligence}$^{\ref{Hawkins}}$, Hawkins presented his findings about the human neural system. He worked closely with biologists and neuroscientists, carefully dissected and studied the neurons and how they work on the micro and macro levels. What he found was that neurons are not specialized, but are rather adaptive. In other words, all neurons are the same, and they can be used to learn anything humans do. This is very different from the {\bf stagnant \& singular paradigm} that plagues most machine learners today. Therefore it is a necessary hurdle to overcome.
 
 This finding is vital as it suggests a fundamental and unifying machanism for our neural system, i.e. there is \emph{one algorithm to learn it all}. This is the holy grail that we sought after in machine learning, and is called the \emph{One-learning algorithm}. With it, once we found the correct model for a neuron and network formation, we may be able to reproduce the emergent behavior known as intelligence.
-
 
 \subsection{Turing}
 
