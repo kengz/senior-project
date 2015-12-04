@@ -586,7 +586,7 @@ At first glance, it is a tensor math library (Tensors are simply multidimensiona
 
 There is also many built-in popular machine learning components, such as softmax and logistic regressors, gradient descent and backpropagation algorithms, plain neural nets, and convolutional network with pooling.
 
-\subsubsection{Computation Graph}
+\subsection{Computation Graph}
 
 The truly novel feature of TensorFlow is its \emph{programming model}. A TensorFlow computation is expressed as a directed graph - we call it the computation graph. A graph node is a computation step, or simply \emph{Op} for \emph{Operation}. This generalizes to the operation of updating state, inputing data and controling the logic. A directed graph edge represents the flow of data encoded in a \emph{tensor}, from the output to the input node. There exists also special edges called \emph{control dependencies} without data-flow - these merely specifies that the \emph{source Op} must complete before the \emph{target Op} can run.
 
@@ -603,7 +603,7 @@ A computation graph can be partitioned into disjoint subgraphs that are then pla
 The subgraph-partitioning also allows for partial execution. For a large network, the user can develop and test a subgraph independently by providing special\emph{feed} and \emph{fetch} nodes that simulates data input and output for this subgraph. Such independence makes development easier as one can focus on a more manageable subgraph without having to warry about the larger graph. A subgraph can also be easily replaced by a new module, or be extended, as how one can easily extend a graph by adding edges and nodes.
 
 
-\subsubsection{Democratization}
+\subsection{Democratization}
 Distributed computing with graphs is not by itself anything novel. It is true that TensorFlow is not revolutionary in this sense, but this is not what Google try to do.
 
 The primary contribution of TensorFlow is in \emph{overcoming complexities} - it does not revolutionize machine learning, but it will certainly change \emph{how we do} machine learning.
@@ -674,19 +674,51 @@ At the time of writing, TensorFlow has only been released for less than a month.
 
 
 
-% In his book \emph{On Intelligence}$^\ref{Hawkins}$, Hawkins 
-
-Hawkins
-CLA
-Andrew Ng, One learning algorithm
 
 
 
+\section{The Future}
+
+Where is machine learning heading to? Its applications will certainly grow broader and more powerful very rapidly. Will it finally allow us to create true machine intelligence that is on par with the humans?
+
+The neural networks drew inspirations from the human neural system, but by no means they are equivalent. Despite that DNNs are very powerful and may seem to mimic some aspects of human cognition, it is still quite far from that. The obvious difference is that neural nets need a large set of training data to achieve a very limited goal, whereas humans need far fewer observations to learn a wide range of skills.
+
+We look at a few lines of work that seek to push machine learning further into the realm of what is known as \emph{Artificial General Intelligence} - A.I. that is general enough that its cognitive ability is at least as great as human's.
+
+
+\subsection{Bayesian Theory of Mind}
+
+This is a fresh field headed by Joshua Tenenbaum and Chris Baker from the MIT Computational Cognitive Science Group, Noah Goodman from the Stanford Computation and Cognition Lab, and their peers.
+
+Their research goal is to study and model the abstract human cognitive capability using causal graphs and Bayesian framework. They have proven theoretically and empirically that the Bayesian framework in general enough to capture various aspects of human cognition. Moreover, they have made progress towards constructing a type of neural net called the Hierarchical Deep Learner that can use less data samples to train$^{\ref{hierarchical}}$. There is undoubtedly still a lot to do, but they research is promising.
 
 
 
-\section{Future Work}
+\subsection{One-learning Algorithm}
 
+In the book \emph{On Intelligence}$^{\ref{Hawkins}}$, Hawkins presented his findings about the human neural system. He worked closely with biologists and neuroscientists, carefully dissected and studied the neurons and how they work on the micro and macro levels. What he found was that neurons are not specialized, but are rather adaptive. In other words, all neurons are the same, and they can be used to learn anything humans do.
+
+This finding is vital as it suggests a fundamental and unifying machanism for our neural system, i.e. there is \emph{one algorithm to learn it all}. This is the holy grail that we sought after in machine learning, and is called the \emph{One-learning algorithm}. With it, once we found the correct model for a neuron and network formation, we may be able to reproduce the emergent behavior known as intelligence.
+
+
+\subsection{Turing}
+
+The Turing Machine is the theoretical model for general purpose computer. However, no one has been able to prove whethere or not this is the upper bound for computing machines. If so, then the human brain is simply a class of Turing Machine; otherwise, there must exist a more powerful class of machine accompanied by a more general theory of computation. The latter options seems less likely, thus more people assume the former stance.
+
+The difficulty then, is that there are countably finite classes of Turing Machines, and to find one that describes our brain is as hard as finding a unique integer in the set of the natural numbers. Furthermore, whatever the human brain is, it must be a bounded machine, since there is only finitely many neurons (and thus a finite memory), whereas the Universal Turing Machine has infinite discrete memory.
+
+Lastly, for every sufficiently smart A.I. or machine learner that we create, we must perform an intelligence test on it. The test by itself is also very tricky to devise. The original Imitation Game as outlined by Turing had been passed this year by an A.I. that does not exhibit satisfactory intelligence as judged by humans. As we continue to exponentiate our computing power and the capabilities of machine learners, in the near future we will need a new test for A.I.s to truly answer the question - is this machine intelligent?
+
+
+
+
+\section{Conclusion}
+
+In this paper we present an introduction to artificial neural networks - currently the most popular machine learning technique. We try to emphasize both the theoretical foundation and the practical applications, as well as providing the most recent developments.
+
+We introduce the theory bottom-up, from the most fundamental definition of a \emph{learning problem}, to the most basic construction of an artificial neural network. Vital algorithms are provided whenever useful. Then, we build up to the deep neural networks, and give a careful description of a construction.
+
+The variants of neural nets with their strengths and weaknesses are described with real-world applications in mind. Finally, we include \emph{TensorFlow} - the latest hit in machine learning, and discuss the future of neural networks.
 
 
 
@@ -708,6 +740,8 @@ Andrew Ng, One learning algorithm
 \item Ng, Andrew et. al. \emph{UFLDL Tutorial.} \url{http://deeplearning.stanford.edu/wiki/index.php/UFLDL_Tutorial}\label{UFLDL}
 
 \item Dean, Jeffrey et. al. \emph{TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems}, Google Research. 2015. \label{tensorflow_paper}
+
+\item R Salakhutdinov, JB Tenenbaum, A Torralba. \emph{Learning with hierarchical-deep models}, Pattern Analysis and Machine Intelligence, IEEE, 2013. \label{hierarchical}
 
 
 \end{enumerate}
