@@ -598,12 +598,12 @@ The data tensors that flow in the directed edges are intuitive to grasp. Tensors
 
 The graph-based operation and control flow offer a rich and intuitive programming model. The entire TensorFlow graph can be executed on a single device as usual, but things only get interesting when we consider a distributed execution.
 
-A computation graph can be partitioned into disjoint subgraphs that are then placed on different devices. The overall distributed components, despite being separated, still remember their proper dependencies, thus the entire computation will remain coherent. Furthermore, the model is fault-tolerant, as each subgraph can maintain state-persistence or perform independent computation even if some other subgraphs fail. The entire computation can then resume quickly by simply restarting the faulty components, while the healthy ones are always up and ready.
+A computation graph can be partitioned into disjoint subgraphs that are then placed on different devices. The overall distributed components, despite being separated, still remember their proper dependencies, thus the entire computation will remain coherent. This resource allocation is also handled automatically in the background. Furthermore, the model is fault-tolerant, as each subgraph can maintain state-persistence or perform independent computation even if some other subgraphs fail. The entire computation can then resume quickly by simply restarting the faulty components, while the healthy ones are always up and ready.
 
 The subgraph-partitioning also allows for partial execution. For a large network, the user can develop and test a subgraph independently by providing special\emph{feed} and \emph{fetch} nodes that simulates data input and output for this subgraph. Such independence makes development easier as one can focus on a more manageable subgraph without having to warry about the larger graph. A subgraph can also be easily replaced by a new module, or be extended, as how one can easily extend a graph by adding edges and nodes.
 
 
-\subsubsection{Primary Contribution}
+\subsubsection{Democratization}
 Distributed computing with graphs is not by itself anything novel. It is true that TensorFlow is not revolutionary in this sense, but this is not what Google try to do.
 
 The primary contribution of TensorFlow is in \emph{overcoming complexities} - it does not revolutionize machine learning, but it will certainly change \emph{how we do} machine learning.
@@ -652,20 +652,25 @@ for i in range(1000):
 \end{lstlisting}
 
 
-In less than 20 lines of code, we can train an ANN to recognize images of digits at $98\%$ accuracy - the simplicity achieved with TensorFlow is dramatic.
+In less than 20 lines of code, we can train an ANN to recognize images of digits at $98\%$ accuracy - the simplicity achieved with TensorFlow is dramatic. 
+
+Just years ago, practical machine learning was the inaccessible toys of elite academics, mainly due to the implementations being highly technical and complex. Today, any interested person with some understanding of the subject can experiment and build her own machine learners. What TensorFlow has achieved/will achieve is the successful democratization of machine learning.
+
+We look more carefully how TensorFlow democratizes machine learning:
+
+\begin{enumerate}
+	\item \emph{The choice of high-level interface language:} Tensorflow is implemented in {\tt C++}, but the language that people interface with it is {\tt Python}, which is a popular and easy-to-use scripting language. This makes everything much easier and concise, as we saw in the example above. More implementations will come soon in other popular languages as well.
+	\item \emph{The programming model:} The usage of computation graph is robust and intuitive. The modularity that comes with it also allows users to focus on a much manageable subcomponent of a very large structure.
+	\item \emph{Practicality:} The resilient distributed computing and efficient implementation makes the otherwise computation-heavy machine learning practical and fast, as most users can easily use it, and can divide the computation to different devices/resources such as the CPU, GPU of multiple connected machines. Individuals can use it even without owning an entire server farm.
+	\item \emph{Scalability:} TensorFlow is built for the individuals as well as the engineering teams at Google. It can be a simple ANN that runs on a laptop, or a gigantic DNN that runs on some dedicated Google server farm. With the distributed computating, it can also run on thousands or millions of devices - like how Google is deploying DNN for Google Translate using the users' smartphones/computers in parts.
+	\item \emph{Complexity-handling:} The various features described above - graph construction, dependencies, flow control, device/resource allocation - are all handled automatically in the background. Moreover, many useful \emph{Ops} such as the gradient descend algorithm and the construction of a complete neural net are packaged into built-in functions. What would take hundreds of lines of code if self-implemented now takes only one line in TensorFlow.
+	\item \emph{Open source:} The choice to release one of the most powerful proprietary tools of Google to the public isn't unreasonable. With contributions from the community, TensorFlow can improve and grow even faster - it's a win-win situation.
+	\item \emph{Bridging the gap:} As part of the needs realized by the research groups at Google, ``It is no longer acceptable to separate research from deployment,'' the company has been trying to shorten the transition between academic research and industrial application. TensorFlow answers the question by providing a unifying platform - researchers can propose and try out new ideas immediately on it, and if they work, send the same source code for the engineer to deploy.
+\end{enumerate}
 
 
-interface
+At the time of writing, TensorFlow has only been released for less than a month. The reactions from the community have been welcoming, and people are rapidly picking up and experimenting with the tools. It will be some time before we can see the true impact of TensorFlow - whether or not it will dramatically push machine learning forward.
 
-
-fast and easy to setup: if have any idea, can immediately test it out.
-brige n gap between research and industry, idea and realization
-Graph: computation as node, tensor data flow as edges. 
-temporal logic control
-versatile structure - can compute on subgraph for testing. Replacement, injection
-resource distribution - multi devices, taken care of. Phone. OMGGG
-tensor library
-all backend complexities taken care of in the background
 
 
 
