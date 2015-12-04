@@ -10,6 +10,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{amssymb, amsmath, amsthm}
+\usepackage{listings}
 
 %Sets the margins
 
@@ -572,10 +573,99 @@ Decades ago linguists have tried to come up with the ultimate algorithm that cap
 Then, Google started its own project, which would then become Google Translate. At that time, Google already had a sufficiently large amount of translated texts, for example between English and French. Instead of devising a collection of production rules and algorithms, the team stuck with an unusual approach - feeding the vast amount of translated texts they had into a neural net. Much to their surprise, it worked, and Google Translate was born. The result was much better than any carefully devised algorithms. No one knew how, but \emph{it worked}. No wonder neural nets are often called a ``black box'', because there is nothing else other than the network and edge weights. If you feed enough data and teaches it about the output, it picks up on the pattern. Neural nets also help Google filter out $99.9\%$ of the spams in Gmail.
 
 
-2015 is a big year for machine learning - deep networks especially. Google showed off its deep learner that can quickly learn and play games on a super-human level. Google Deep Dream is another publicity stunt, in which an image recognizer spits out new psychedelic images when reversed - it ``dreams'' up images instead of recognizing. IBM Watson got its deep learning upgrade and learned to diagnose diseases and invent new cooking recipe. Facebook released $M$, their A.I. virtual assistant on the \emph{Messenger} app. Weeks after in November 2015, Google open sourced \emph{TensorFlow}, their machine learning library. We will take a quick look at it.
+2015 is a big year for machine learning - deep networks especially. Google showed off its deep learner that can quickly learn and play games on a super-human level. Google Deep Dream is another publicity stunt, in which an image recognizer spits out new psychedelic images when reversed - it ``dreams'' up images instead of recognizing. IBM Watson got its deep learning upgrade and learned to diagnose diseases and invent new cooking recipe. Facebook released $M$, their A.I. virtual assistant on the \emph{Messenger} app. Weeks after, Google open sourced \emph{TensorFlow}, their machine learning library. We will take a quick look at it.
 
 
 \subsection{TensorFlow}
+
+Released in November 2015 by Google, \emph{TensorFlow}$^{\ref{tensorflow_paper}}$ is an API library for ``Large-Scale Machine Learning on Heterogeneous Distributed Systems''. Note that this by itself is not a new machine learning technique, but rather a new \emph{architecture} that will streamline how we develop and research with machine learning.
+
+TensorFlow is a culmination of Googlers' experience of deploying machine learning on a large scale. One can see it as a generalized, unified methodology for the commmunity. Generalization gives it flexibility for diverse applications; unification gives all the different team access to a well-maintained, consistent and up-to-date code base. It is already widely used at Google, and has helped many teams work faster and more efficiently.
+
+At first glance, it is a tensor math library (Tensors are simply multidimensional array - scalars are rank-0 tensors, vectors are rank-1, matrices are rank-2, $\cdots$ and so on). It is equipped with many common and performant tensor operators for arithmetic, calculus, transformation, encoding, etc.
+
+There is also many built-in popular machine learning components, such as softmax and logistic regressors, gradient descent and backpropagation algorithms, plain neural nets, and convolutional network with pooling.
+
+\subsubsection{Computation Graph}
+
+The truly novel feature of TensorFlow is its \emph{programming model}. A TensorFlow computation is expressed as a directed graph - we call it the computation graph. A graph node is a computation step, or simply \emph{Op} for \emph{Operation}. This generalizes to the operation of updating state, inputing data and controling the logic. A directed graph edge represents the flow of data encoded in a \emph{tensor}, from the output to the input node. There exists also special edges called \emph{control dependencies} without data-flow - these merely specifies that the \emph{source Op} must complete before the \emph{target Op} can run.
+
+An \emph{Op} has a name such as \emph{multiply, add}, and represents abstract computation. A \emph{kernel} is a device-specific implementation of an operation. Device here refers to physical computation device such as the CPU or GPU. A \emph{Variable} is a special kind of \emph{Op} that allows for tensor-presistence during the runtime.
+
+A \emph{Session} instantiates an empty graph for contruction, and has the \emph{Run} method to run the computation graph once construction is complete.
+
+The data tensors that flow in the directed edges are intuitive to grasp. Tensors are generic and compact for discrete data-encoding; they are also natural to neural networks as we have seen their tensor formalizations before.
+
+The graph-based operation and control flow offer a rich and intuitive programming model. The entire TensorFlow graph can be executed on a single device as usual, but things only get interesting when we consider a distributed execution.
+
+A computation graph can be partitioned into disjoint subgraphs that are then placed on different devices. The overall distributed components, despite being separated, still remember their proper dependencies, thus the entire computation will remain coherent. Furthermore, the model is fault-tolerant, as each subgraph can maintain state-persistence or perform independent computation even if some other subgraphs fail. The entire computation can then resume quickly by simply restarting the faulty components, while the healthy ones are always up and ready.
+
+The subgraph-partitioning also allows for partial execution. For a large network, the user can develop and test a subgraph independently by providing special\emph{feed} and \emph{fetch} nodes that simulates data input and output for this subgraph. Such independence makes development easier as one can focus on a more manageable subgraph without having to warry about the larger graph. A subgraph can also be easily replaced by a new module, or be extended, as how one can easily extend a graph by adding edges and nodes.
+
+
+\subsubsection{Primary Contribution}
+Distributed computing with graphs is not by itself anything novel. It is true that TensorFlow is not revolutionary in this sense, but this is not what Google try to do.
+
+The primary contribution of TensorFlow is in \emph{overcoming complexities} - it does not revolutionize machine learning, but it will certainly change \emph{how we do} machine learning.
+
+To illustrate, we show below how easy it is to use TensorFlow to train an ANN with softmax classifier to recognize images of digits.
+
+\begin{lstlisting}[language=Python]
+
+import tensorflow as tf
+# import the digit image data
+import input_data
+mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+
+# create a new Session, then 
+# build the graph below by defining the nodes (Ops)
+sess = tf.InteractiveSession()
+
+# the input and output tensors of the ANN, 
+# shaped to match the image input dimension (pixels)
+x = tf.placeholder("float", shape=[None, 784])
+y_ = tf.placeholder("float", shape=[None, 10])
+
+# The weights tensor and the bias tensor
+W = tf.Variable(tf.zeros([784,10]))
+b = tf.Variable(tf.zeros([10]))
+
+# initialize the Variables
+init = tf.initialize_all_variables()
+
+# run the session (graph) to initialize
+sess.run(init)
+
+# define the softmax model, also specifying 
+# the edges in the graph 
+# (e.g. Ops x, W, b and pointing to Op y)
+y = tf.nn.softmax(tf.matmul(x,W)+b)
+cross_entropy = -tf.reduce_sum(y_*tf.log(y))
+
+# define the training step to use gradient descent
+train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+
+# run the training on the data, over 1000 iterations
+for i in range(1000):
+	batch = mnist.train.next_batch(50)
+	train_step.run(feed_dict={x: batch[0], y_: batch[1]})
+\end{lstlisting}
+
+
+In less than 20 lines of code, we can train an ANN to recognize images of digits at $98\%$ accuracy - the simplicity achieved with TensorFlow is dramatic.
+
+
+interface
+
+
+fast and easy to setup: if have any idea, can immediately test it out.
+brige n gap between research and industry, idea and realization
+Graph: computation as node, tensor data flow as edges. 
+temporal logic control
+versatile structure - can compute on subgraph for testing. Replacement, injection
+resource distribution - multi devices, taken care of. Phone. OMGGG
+tensor library
+all backend complexities taken care of in the background
 
 
 
