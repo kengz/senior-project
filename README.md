@@ -1,30 +1,9 @@
 # Senior Project
-Senior project at Lafayette, on machine learning, where I study the theory and build the tools.
+Senior project on neural networks, for the Math Department at Lafayette. Authored by Wah Loon Keng, Dec 2015.
 
-## Setup
-Time to build boys. The tools are in different repos. Just gather them.
-
-
-## Notes and outlines
-
-#### Main theme (remember this is math)
-- Machine learning, general techniques, models etc.
-- NELL architecture, theories and tweaked design. Top level KB, influencing low level algorithms/ML.
-- NELL applied, to generic big data. Finance, because of abundant data. This often requires human intuition - translated into the alpha. Very complex and many interactions (unlike image recognition etc.) 
-- Implementations (not necessarily complete). I'm building the tools.
+## Paper
+Find the paper in [paper/senior-project-paper.pdf](./paper/senior-project-paper.pdf)
 
 
-#### Sections
-- Introduction to machine learning
-- Popular techniques, recent popularity in the industry.
-- The old paradigm: singular and one-off.
-
-- The new paradigm: NELL. Inspiration, problem solved, theory, features.
-- Current status
-- Pros and cons.
-
-
-#### Theoretical side
-
-
-#### Implementation side
+## Abstract
+This paper gives a gentle introduction to artificial neural networks with focus on the mathematical foundation and industrial applications. We include the core concepts and algorithms, organized systematically and simplified with tensorial notations. Moreover, we build up the topics from the simpler, fundamental components, going from the perceptron artificial neural net, gradient descent, backpropagation, to autoencoders and deep neural net. The latest progresses in research and industrial applications are included as well. Finally, we briefly describe TensorFlow, and discuss the future of artificial intelligence.
